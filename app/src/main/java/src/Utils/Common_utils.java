@@ -1,4 +1,4 @@
-package Utils;
+package src.Utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.example.parkingticket.R;
+import com.example.src.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Common_utils {

@@ -1,4 +1,4 @@
-package activities;
+package src.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +11,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.example.parkingticket.R;
+import com.example.src.R;
 
-import Utils.My_images;
+import src.Utils.My_images;
 
 public class Activity_Entrance extends AppCompatActivity {
     private ImageView centerImage;
@@ -50,7 +50,7 @@ public class Activity_Entrance extends AppCompatActivity {
 
     /* load image to the center of the screen */
     private void setCenterImage() {
-        My_images images = My_images.initHelper(this);
+        My_images images = My_images.getInstance();
         images.setImage(ContextCompat.getDrawable(this, R.mipmap.ic_launcher_round), centerImage);
     }
 }
