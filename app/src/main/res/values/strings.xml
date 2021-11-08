@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">תו חניה</string>
+    <string name="internet_dialog_title">No Connection</string>
+    <string name="internet_supporting_text">please connect to the internet and try again</string>
+    <string name="ok">OK</string>
+    <string name="error_title">Something went wrong…</string>
+    <string name="dialog_error_message">please try again later</string>
+    <string name="ParkingTicket">תו חניה</string>
+</resources>
