@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/page_1"
+            android:enabled="true"
+            android:title="הנפקה"
+            android:icon="@drawable/ic_new_ticket_foreground"
+            />
+        <item
+            android:id="@+id/page_2"
+            android:enabled="true"
+            android:title="מידע"
+            android:icon="@drawable/ic_info_foreground"/>
+        <item
+            android:id="@+id/page_3"
+            android:enabled="true"
+            android:title="סטטוס"
+            android:icon="@drawable/ic_status_foreground"/>
+</menu>

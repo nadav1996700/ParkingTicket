@@ -11,7 +11,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Common_utils {
     private static Common_utils instance;
-    private Context context;
+    private final Context context;
     private MaterialAlertDialogBuilder dialog;
 
     private Common_utils(Context context) {
@@ -41,10 +41,10 @@ public class Common_utils {
 
     // present error dialog
     private void internet_dialog(final Activity activity) {
-        dialog = new MaterialAlertDialogBuilder(activity);
-        dialog.setTitle(activity.getResources().getString(R.string.internet_dialog_title));
-        dialog.setMessage(activity.getResources().getString(R.string.internet_supporting_text));
-        dialog.setPositiveButton(activity.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+        dialog = new MaterialAlertDialogBuilder(context);
+        dialog.setTitle(context.getResources().getString(R.string.internet_dialog_title));
+        dialog.setMessage(context.getResources().getString(R.string.internet_supporting_text));
+        dialog.setPositiveButton(context.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Respond to positive button press
@@ -61,11 +61,11 @@ public class Common_utils {
     }
 
     /* presents error message OnCanceled */
-    public void error_dialog(final Activity activity) {
-        dialog = new MaterialAlertDialogBuilder(activity);
-        dialog.setTitle(activity.getResources().getString(R.string.error_title));
-        dialog.setMessage(activity.getResources().getString(R.string.dialog_error_message));
-        dialog.setPositiveButton(activity.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+    public void error_dialog() {
+        dialog = new MaterialAlertDialogBuilder(context);
+        dialog.setTitle(context.getResources().getString(R.string.error_title));
+        dialog.setMessage(context.getResources().getString(R.string.dialog_error_message));
+        dialog.setPositiveButton(context.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Respond to positive button press

@@ -4,19 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="src.activities.MainActivity"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/teal_700"
+    tools:context="src.activities.DataActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="14">
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/main_FRAG_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+        android:layout_weight="14"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Activity Data"
+            android:textSize="40sp"
+            android:layout_gravity="center">
+        </TextView>
     </RelativeLayout>
 
     <RelativeLayout
@@ -31,6 +34,5 @@
             app:backgroundTint="#F3F3F8"
             app:menu="@menu/bottom_navigation_menu"/>
     </RelativeLayout>
-
 
 </LinearLayout>
