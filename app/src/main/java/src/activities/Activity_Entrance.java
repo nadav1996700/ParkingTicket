@@ -51,6 +51,6 @@ public class Activity_Entrance extends AppCompatActivity {
     /* load image to the center of the screen */
     private void setCenterImage() {
         My_images images = My_images.getInstance();
-        images.setImage(ContextCompat.getDrawable(this, R.mipmap.ic_launcher_round), centerImage);
+        images.setImage(centerImage, ContextCompat.getDrawable(this, R.mipmap.ic_launcher_round));
     }
 }

@@ -72,7 +72,7 @@ public class My_images {
     }
 
     /* set images using glide library (by drawable) */
-    public void setImage(Drawable photo, ImageView imageView) {
+    public void setImage(ImageView imageView, Drawable photo) {
         //ImageView imageView = activity.findViewById(download_placeholder);
         Glide.with(context)
                 .load(photo)
