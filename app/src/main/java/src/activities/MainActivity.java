@@ -20,6 +20,7 @@ import src.fragments.FragmentPersonalInfo;
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bnv;
     private StateProgressBar stateProgressBar;
+    private ImageView background_img;
     private final String[] descriptionData = {"אישי", "מגורים", "רכב", "מסמכים"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,5 +62,8 @@ public class MainActivity extends AppCompatActivity {
         bnv.setSelectedItemId(R.id.page_1);
         stateProgressBar = findViewById(R.id.state_progress_bar);
         stateProgressBar.setStateDescriptionData(descriptionData);
+        background_img = findViewById(R.id.main_IV_background);
+        // set background image
+        My_images.getInstance().setImage(background_img, ContextCompat.getDrawable(this, R.drawable.background_new_ticket));
     }
 }
