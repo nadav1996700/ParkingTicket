@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#359bca"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="src.fragments.FragmentPersonalInfo">
     <ScrollView
         android:layout_width="match_parent"
@@ -127,8 +129,7 @@
 
                 <EditText
                     android:id="@+id/personalInfo_EDT_phone"
-                    android:layout_width="0dp"
-                    android:layout_weight=".70"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
                     android:padding="10dp"
@@ -140,13 +141,6 @@
                     android:textColor="#86818E"
                     android:textColorHint="#86818E" />
 
-                <Spinner
-                    android:id="@+id/personalInfo_Spinner_phone"
-                    android:layout_width="0dp"
-                    android:layout_weight=".20"
-                    android:layout_height="wrap_content"
-                    />
-
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -157,6 +151,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
                 android:text="@string/continue_next_page"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="15sp"

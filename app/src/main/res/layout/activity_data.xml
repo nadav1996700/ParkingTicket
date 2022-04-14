@@ -31,6 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#F3F3F8"
+            app:itemTextColor="@color/background_text_color"
+            app:itemIconTint="@color/background_text_color"
             app:backgroundTint="#F3F3F8"
             app:menu="@menu/bottom_navigation_menu"/>
     </RelativeLayout>
