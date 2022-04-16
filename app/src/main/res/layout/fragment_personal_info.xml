@@ -135,7 +135,6 @@
                     android:padding="10dp"
                     android:background="@drawable/rounded_edit_text"
                     android:cursorVisible="false"
-                    android:enabled="false"
                     android:hint="@string/private_number"
                     android:inputType="numberDecimal"
                     android:textColor="#86818E"

@@ -1,12 +1,12 @@
 package src.Model;
 
 public class PersonalDetails {
-    private String id;
-    private String firstName;
-    private String lastName;
-    private String dateOfBirth;
-    private String phone;
-    private String email;
+    private String id = "";
+    private String firstName = "";
+    private String lastName = "";
+    private String dateOfBirth = "";
+    private String phone = "";
+    private String email = "";
 
     public PersonalDetails() {
         // empty constructor

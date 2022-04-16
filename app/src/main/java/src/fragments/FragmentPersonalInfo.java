@@ -12,8 +12,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.src.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
 
+import src.Model.PersonalDetails;
 import src.Utils.DatePickerFragment;
+import src.Utils.My_SP;
 
 public class FragmentPersonalInfo extends Fragment {
     protected View view;
@@ -25,6 +28,8 @@ public class FragmentPersonalInfo extends Fragment {
     private EditText phone;
     private ImageButton pickDate;
     private MaterialButton btnContinue;
+    private PersonalDetails pd;
+    private My_SP sp = My_SP.getInstance();
 
     public FragmentPersonalInfo() {
         // Required empty public constructor
@@ -58,8 +63,52 @@ public class FragmentPersonalInfo extends Fragment {
             view = inflater.inflate(R.layout.fragment_personal_info, container, false);
         // bind variables
         bindVariables();
+        // load data from sharedPreferences
+        loadData();
         pickDate.setOnClickListener(v -> showDatePickerDialog(v));
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveData();
+
+            }
+        });
         return view;
+    }
+
+    // save data to shared preferences
+    private void saveData() {
+        if(validateData()) {
+            pd = new PersonalDetails();
+            pd.setId(id.getText().toString());
+            pd.setFirstName(firstName.getText().toString());
+            pd.setLastName(lastName.getText().toString());
+            pd.setDateOfBirth(birthday.getText().toString());
+            pd.setEmail(email.getText().toString());
+            pd.setPhone(phone.getText().toString());
+            sp.saveObject(pd,"PersonalData");
+        }
+    }
+
+    private boolean validateData() {
+        return true;
+    }
+
+    // load data from shared preferences
+    private void loadData() {
+        // convert json data to PersonalDetails object
+        Gson gson = new Gson();
+        String json = sp.loadData("PersonalData");
+        if(json != null) {
+            pd = gson.fromJson(json, PersonalDetails.class);
+            // fill the form with the data
+            firstName.setText(pd.getFirstName());
+            lastName.setText(pd.getLastName());
+            id.setText(pd.getId());
+            email.setText(pd.getEmail());
+            phone.setText(pd.getPhone());
+            birthday.setText(pd.getDateOfBirth());
+        }
     }
 
     public void showDatePickerDialog(View v) {
@@ -81,5 +130,17 @@ public class FragmentPersonalInfo extends Fragment {
         phone = view.findViewById(R.id.personalInfo_EDT_phone);
         btnContinue = view.findViewById(R.id.personalInfo_BTN_continue);
         pickDate = view.findViewById(R.id.personalInfo_BTN_pickDate);
+    }
+
+    @Override
+    public void onPause() {
+        saveData();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        loadData();
+        super.onResume();
     }
 }

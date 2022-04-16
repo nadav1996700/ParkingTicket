@@ -10,6 +10,7 @@ public class Car {
     private Pticket pticket;
 
     public Car() {
+        //empty public constructor
     }
 
     public Car(String carId, String color, String manufacturer, Ownership ownership, PersonalDetails personalDetails, Residential residential, Pticket pticket) {
