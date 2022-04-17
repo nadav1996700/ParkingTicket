@@ -1,10 +1,7 @@
 package src.Model;
 
 public class Car {
-    private String carId;
-    private String color;
-    private String manufacturer;
-    private Ownership ownership;
+    private CarDetails carDetails;
     private PersonalDetails personalDetails;
     private Residential residential;
     private Pticket pticket;
@@ -13,46 +10,19 @@ public class Car {
         //empty public constructor
     }
 
-    public Car(String carId, String color, String manufacturer, Ownership ownership, PersonalDetails personalDetails, Residential residential, Pticket pticket) {
-        this.carId = carId;
-        this.color = color;
-        this.manufacturer = manufacturer;
-        this.ownership = ownership;
+    public Car(CarDetails carDetails, PersonalDetails personalDetails, Residential residential, Pticket pticket) {
+        this.carDetails = carDetails;
         this.personalDetails = personalDetails;
         this.residential = residential;
         this.pticket = pticket;
     }
 
-    public String getCarId() {
-        return carId;
+    public CarDetails getCarDetails() {
+        return carDetails;
     }
 
-    public void setCarId(String carId) {
-        this.carId = carId;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public void setManufacturer(String manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public Ownership getOwnership() {
-        return ownership;
-    }
-
-    public void setOwnership(Ownership ownership) {
-        this.ownership = ownership;
+    public void setCarDetails(CarDetails carDetails) {
+        this.carDetails = carDetails;
     }
 
     public PersonalDetails getPersonalDetails() {

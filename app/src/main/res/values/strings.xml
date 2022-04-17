@@ -14,4 +14,13 @@
     <string name="enter_id">תעודת זהות</string>
     <string name="continue_next_page">המשך</string>
     <string name="private_number">טלפון נייד</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="residential_title">מגורים</string>
+    <string name="city">עיר</string>
+    <string name="street">רחוב</string>
+    <string name="apartmentNumber">מספר דירה</string>
+    <string name="houseNumber">מספר בית</string>
+    <string name="postalCode">מיקוד</string>
+    <string name="permanentTenant">דייר קבוע</string>
+    <string name="rentTenant">דייר בשכירות</string>
 </resources>

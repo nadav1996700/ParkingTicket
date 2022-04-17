@@ -30,6 +30,7 @@ public class FragmentPersonalInfo extends Fragment {
     private MaterialButton btnContinue;
     private PersonalDetails pd;
     private My_SP sp = My_SP.getInstance();
+    private CallBack_changeFragmentPersonal callBack_changeFragmentPersonal;
 
     public FragmentPersonalInfo() {
         // Required empty public constructor
@@ -78,7 +79,7 @@ public class FragmentPersonalInfo extends Fragment {
 
     // save data to shared preferences
     private void saveData() {
-        if(validateData()) {
+        if (validateData()) {
             pd = new PersonalDetails();
             pd.setId(id.getText().toString());
             pd.setFirstName(firstName.getText().toString());
@@ -86,7 +87,7 @@ public class FragmentPersonalInfo extends Fragment {
             pd.setDateOfBirth(birthday.getText().toString());
             pd.setEmail(email.getText().toString());
             pd.setPhone(phone.getText().toString());
-            sp.saveObject(pd,"PersonalData");
+            sp.saveObject(pd, "PersonalData");
         }
     }
 
@@ -99,7 +100,7 @@ public class FragmentPersonalInfo extends Fragment {
         // convert json data to PersonalDetails object
         Gson gson = new Gson();
         String json = sp.loadData("PersonalData");
-        if(json != null) {
+        if (json != null) {
             pd = gson.fromJson(json, PersonalDetails.class);
             // fill the form with the data
             firstName.setText(pd.getFirstName());

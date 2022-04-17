@@ -2,10 +2,8 @@ package src.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -13,15 +11,18 @@ import com.example.src.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
-import src.Utils.Common_utils;
-import src.Utils.My_images;
+import src.Model.Car;
+import src.Model.PersonalDetails;
+import src.fragments.CallBack_changeFragmentPersonal;
 import src.fragments.FragmentPersonalInfo;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CallBack_changeFragmentPersonal {
     private BottomNavigationView bnv;
     private StateProgressBar stateProgressBar;
-    //private ImageView background_img;
     private final String[] descriptionData = {"אישי", "מגורים", "רכב", "מסמכים"};
+    private CallBack_changeFragmentPersonal callBack_changeFragmentPersonal = this;
+    private Car car = new Car();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,11 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
     /* start new fragment */
     private void initFragment(Fragment fragment) {
-        if (Common_utils.getInstance().checkInternetConnection(this)) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.main_FRAG_fragment, fragment);
-            transaction.commit();
-        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_FRAG_fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     /* initialize variables */
@@ -62,8 +62,11 @@ public class MainActivity extends AppCompatActivity {
         bnv.setSelectedItemId(R.id.page_1);
         stateProgressBar = findViewById(R.id.state_progress_bar);
         stateProgressBar.setStateDescriptionData(descriptionData);
-        //background_img = findViewById(R.id.main_IV_background);
-        // set background image
-        //My_images.getInstance().setImage(background_img, ContextCompat.getDrawable(this, R.drawable.background_new_ticket));
+    }
+
+    @Override
+    public void changeFragmentPersonal(Fragment fragment, PersonalDetails personalDetails) {
+        car.setPersonalDetails(personalDetails);
+        initFragment(fragment);
     }
 }

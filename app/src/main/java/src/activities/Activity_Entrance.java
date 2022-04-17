@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.src.R;
 
+import src.Utils.Common_utils;
 import src.Utils.My_images;
 
 public class Activity_Entrance extends AppCompatActivity {
@@ -22,7 +23,7 @@ public class Activity_Entrance extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_entrance);
-
+        if (Common_utils.getInstance().checkInternetConnection(this)) {
             // initialize variables
             setValues();
             // set center image
@@ -36,6 +37,7 @@ public class Activity_Entrance extends AppCompatActivity {
                     finish();
                 }
             }, DELAY);
+        }
     }
 
     /* initialize variables */
