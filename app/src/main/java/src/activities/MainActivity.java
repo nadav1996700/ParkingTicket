@@ -63,7 +63,13 @@ public class MainActivity extends AppCompatActivity implements
 
     /* start new fragment */
     private void initFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                );
         transaction.replace(R.id.main_FRAG_fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
