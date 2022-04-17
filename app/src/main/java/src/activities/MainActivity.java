@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements
         bnv.setSelectedItemId(R.id.page_1);
         stateProgressBar = findViewById(R.id.state_progress_bar);
         stateProgressBar.setStateDescriptionData(descriptionData);
+        stateProgressBar.enableAnimationToCurrentState(true);
+        stateProgressBar.setAnimationDuration(3000);
     }
 
     @Override
@@ -89,10 +91,12 @@ public class MainActivity extends AppCompatActivity implements
         FragmentResidential fragmentResidential = new FragmentResidential();
         fragmentResidential.setCallBack(this);
         initFragment(fragmentResidential);
+        stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
     }
 
     @Override
     public void changeFragmentCarDetails(CarDetails carDetails) {
+        stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
 
     }
 
@@ -102,10 +106,28 @@ public class MainActivity extends AppCompatActivity implements
         FragmentCar fragmentCar = new FragmentCar();
         //fragmentCar.setCallBack(this);
         initFragment(fragmentCar);
+        stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
     }
 
     @Override
     public void finishProcess() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        stateProgressBar.setCurrentStateNumber(getPrevStateNumber(stateProgressBar.getCurrentStateNumber()));
+        super.onBackPressed();
+    }
+
+    private StateProgressBar.StateNumber getPrevStateNumber(int currentStateNumber) {
+        switch (currentStateNumber) {
+            case 3:
+                return StateProgressBar.StateNumber.TWO;
+            case 4:
+                return StateProgressBar.StateNumber.THREE;
+            default:
+                return StateProgressBar.StateNumber.ONE;
+        }
     }
 }
