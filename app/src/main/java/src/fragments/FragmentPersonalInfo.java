@@ -70,11 +70,17 @@ public class FragmentPersonalInfo extends Fragment {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
-
+                if(validateData()) {
+                    saveData();
+                    callBack_changeFragmentPersonal.changeFragmentPersonal(pd);
+                }
             }
         });
         return view;
+    }
+
+    public void setCallBack(CallBack_changeFragmentPersonal callBack_changeFragmentPersonal) {
+        this.callBack_changeFragmentPersonal = callBack_changeFragmentPersonal;
     }
 
     // save data to shared preferences

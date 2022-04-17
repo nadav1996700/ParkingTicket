@@ -12,16 +12,27 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import src.Model.Car;
+import src.Model.CarDetails;
 import src.Model.PersonalDetails;
+import src.Model.Residential;
+import src.fragments.CallBack_changeFragmentCarDetails;
 import src.fragments.CallBack_changeFragmentPersonal;
+import src.fragments.CallBack_changeFragmentResidential;
+import src.fragments.CallBack_finishProcess;
+import src.fragments.FragmentCar;
 import src.fragments.FragmentPersonalInfo;
+import src.fragments.FragmentResidential;
 
-public class MainActivity extends AppCompatActivity implements CallBack_changeFragmentPersonal {
+public class MainActivity extends AppCompatActivity implements
+        CallBack_changeFragmentPersonal,
+        CallBack_changeFragmentResidential,
+        CallBack_changeFragmentCarDetails,
+        CallBack_finishProcess {
+
     private BottomNavigationView bnv;
     private StateProgressBar stateProgressBar;
     private final String[] descriptionData = {"אישי", "מגורים", "רכב", "מסמכים"};
-    private CallBack_changeFragmentPersonal callBack_changeFragmentPersonal = this;
-    private Car car = new Car();
+    private final Car car = new Car();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +40,9 @@ public class MainActivity extends AppCompatActivity implements CallBack_changeFr
         setContentView(R.layout.activity_main);
 
         initVariables();
-        initFragment(new FragmentPersonalInfo());
+        FragmentPersonalInfo fragmentPersonalInfo = new FragmentPersonalInfo();
+        fragmentPersonalInfo.setCallBack(this);
+        initFragment(fragmentPersonalInfo);
         bnv.setOnItemSelectedListener(item -> {
             Intent intent;
             switch (item.getItemId()) {
@@ -65,8 +78,28 @@ public class MainActivity extends AppCompatActivity implements CallBack_changeFr
     }
 
     @Override
-    public void changeFragmentPersonal(Fragment fragment, PersonalDetails personalDetails) {
+    public void changeFragmentPersonal(PersonalDetails personalDetails) {
         car.setPersonalDetails(personalDetails);
-        initFragment(fragment);
+        FragmentResidential fragmentResidential = new FragmentResidential();
+        fragmentResidential.setCallBack(this);
+        initFragment(fragmentResidential);
+    }
+
+    @Override
+    public void changeFragmentCarDetails(CarDetails carDetails) {
+
+    }
+
+    @Override
+    public void changeFragmentResidential(Residential residential) {
+        car.setResidential(residential);
+        FragmentCar fragmentCar = new FragmentCar();
+        //fragmentCar.setCallBack(this);
+        initFragment(fragmentCar);
+    }
+
+    @Override
+    public void finishProcess() {
+
     }
 }

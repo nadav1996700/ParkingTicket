@@ -30,6 +30,7 @@ public class FragmentResidential extends Fragment {
     private MaterialButton btnContinue;
     private Residential residential;
     private My_SP sp = My_SP.getInstance();
+    private CallBack_changeFragmentResidential callBack_changeFragmentResidential;
 
     //private static final String ARG_PARAM1 = "param1";
     //private static final String ARG_PARAM2 = "param2";
@@ -77,6 +78,10 @@ public class FragmentResidential extends Fragment {
             }
         });
         return view;
+    }
+
+    public void setCallBack(CallBack_changeFragmentResidential callBack_changeFragmentResidential) {
+        this.callBack_changeFragmentResidential = callBack_changeFragmentResidential;
     }
 
     private void bindVariables() {
