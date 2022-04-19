@@ -23,4 +23,5 @@
     <string name="postalCode">מיקוד</string>
     <string name="permanentTenant">דייר קבוע</string>
     <string name="rentTenant">דייר בשכירות</string>
+    <string name="documents">מסמכים</string>
 </resources>
