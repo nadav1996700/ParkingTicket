@@ -2,6 +2,7 @@ package src.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -59,7 +60,7 @@ public class FragmentCar extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if (view == null)
@@ -68,13 +69,7 @@ public class FragmentCar extends Fragment {
         bindVariables();
         // load data from sharedPreferences
         loadData();
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveData();
-
-            }
-        });
+        btnContinue.setOnClickListener(v -> saveData());
         return view;
     }
 
@@ -83,6 +78,7 @@ public class FragmentCar extends Fragment {
     }
 
     private void bindVariables() {
+        btnContinue = view.findViewById(R.id.car_BTN_continue);
     }
 
     private void loadData() {

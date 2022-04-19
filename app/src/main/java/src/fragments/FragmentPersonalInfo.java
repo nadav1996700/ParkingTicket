@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.src.R;
@@ -57,7 +58,7 @@ public class FragmentPersonalInfo extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if (view == null)
@@ -66,14 +67,11 @@ public class FragmentPersonalInfo extends Fragment {
         bindVariables();
         // load data from sharedPreferences
         loadData();
-        pickDate.setOnClickListener(v -> showDatePickerDialog(v));
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(validateData()) {
-                    saveData();
-                    callBack_changeFragmentPersonal.changeFragmentPersonal(pd);
-                }
+        pickDate.setOnClickListener(this::showDatePickerDialog);
+        btnContinue.setOnClickListener(v -> {
+            if (validateData()) {
+                saveData();
+                callBack_changeFragmentPersonal.changeFragmentPersonal(pd);
             }
         });
         return view;
@@ -85,16 +83,14 @@ public class FragmentPersonalInfo extends Fragment {
 
     // save data to shared preferences
     private void saveData() {
-        if (validateData()) {
-            pd = new PersonalDetails();
-            pd.setId(id.getText().toString());
-            pd.setFirstName(firstName.getText().toString());
-            pd.setLastName(lastName.getText().toString());
-            pd.setDateOfBirth(birthday.getText().toString());
-            pd.setEmail(email.getText().toString());
-            pd.setPhone(phone.getText().toString());
-            sp.saveObject(pd, "PersonalData");
-        }
+        pd = new PersonalDetails();
+        pd.setId(id.getText().toString());
+        pd.setFirstName(firstName.getText().toString());
+        pd.setLastName(lastName.getText().toString());
+        pd.setDateOfBirth(birthday.getText().toString());
+        pd.setEmail(email.getText().toString());
+        pd.setPhone(phone.getText().toString());
+        sp.saveObject(pd, "PersonalData");
     }
 
     private boolean validateData() {

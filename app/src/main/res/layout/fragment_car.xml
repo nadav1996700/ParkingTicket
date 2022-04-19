@@ -1,13 +1,156 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#359bca"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="src.fragments.FragmentCar">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/residential_title"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/residential_EDT_city"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="@string/city"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textColor="#86818E"
+                android:textColorHint="#86818E" />
+
+            <EditText
+                android:id="@+id/residential_EDT_street"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="@string/street"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textColor="#86818E"
+                android:textColorHint="#86818E" />
+
+            <EditText
+                android:id="@+id/residential_EDT_houseNumber"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:cursorVisible="false"
+                android:hint="@string/houseNumber"
+                android:inputType="numberDecimal"
+                android:padding="10dp"
+                android:textColor="#86818E"
+                android:textColorHint="#86818E" />
+
+            <EditText
+                android:id="@+id/residential_EDT_apartmentNumber"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="@string/apartmentNumber"
+                android:inputType="numberDecimal"
+                android:padding="10dp"
+                android:textColor="#86818E"
+                android:textColorHint="#86818E" />
+
+            <EditText
+                android:id="@+id/residential_EDT_postalCode"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="@string/postalCode"
+                android:inputType="numberDecimal"
+                android:padding="10dp"
+                android:textColor="#86818E"
+                android:textColorHint="#86818E" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal">
+
+                <RadioGroup
+                    android:id="@+id/residential_RG"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/residential_RB_permanent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:padding="10dp"
+                        android:text="@string/permanentTenant" />
+
+                    <RadioButton
+                        android:id="@+id/residential_RB_rent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:padding="10dp"
+                        android:text="@string/rentTenant" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/car_BTN_continue"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_gravity="end"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/continue_next_page"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="15sp"
+                android:theme="@style/Theme.MaterialComponents.NoActionBar"
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/colorPrimaryDark"
+                app:strokeWidth="2dp" />
+        </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>

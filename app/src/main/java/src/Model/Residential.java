@@ -1,18 +1,18 @@
 package src.Model;
 
 public class Residential {
-    private String city;
-    private String street;
-    private int houseNumber;
-    private int apartmentNumber;
+    private String city = "";
+    private String street = "";
+    private String houseNumber;
+    private String apartmentNumber;
     private String postalCode;
-    private ResidentialState residentialState;
+    private ResidentialState residentialState = ResidentialState.PERMANENTTENANT;
 
     public Residential() {
         // empty constructor
     }
 
-    public Residential(String city, String street, int houseNumber, int apartmentNumber, String postalCode, ResidentialState residentialState) {
+    public Residential(String city, String street, String houseNumber,String apartmentNumber, String postalCode, ResidentialState residentialState) {
         this.city = city;
         this.street = street;
         this.houseNumber = houseNumber;
@@ -37,19 +37,19 @@ public class Residential {
         this.street = street;
     }
 
-    public int getHouseNumber() {
+    public String getHouseNumber() {
         return houseNumber;
     }
 
-    public void setHouseNumber(int houseNumber) {
+    public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
     }
 
-    public int getApartmentNumber() {
+    public String getApartmentNumber() {
         return apartmentNumber;
     }
 
-    public void setApartmentNumber(int apartmentNumber) {
+    public void setApartmentNumber(String apartmentNumber) {
         this.apartmentNumber = apartmentNumber;
     }
 
