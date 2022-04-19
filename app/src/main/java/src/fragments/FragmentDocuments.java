@@ -1,34 +1,25 @@
 package src.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
+
+import androidx.fragment.app.Fragment;
 
 import com.example.src.R;
 import com.google.android.material.button.MaterialButton;
 
-import src.Model.Car;
-import src.Model.PersonalDetails;
 import src.Model.Residential;
 import src.Utils.My_SP;
 
-public class FragmentCar extends Fragment {
+public class FragmentDocuments extends Fragment {
     protected View view;
-    private EditText carNumber;
-    private EditText color;
-    private EditText manufacturer;
-    private EditText ownership;
-    private MaterialButton btnContinue;
-    private Car car;
+    private MaterialButton btnFinish;
     private My_SP sp = My_SP.getInstance();
-    private CallBack_changeFragmentCarDetails callBack_changeFragmentCarDetails;
+    private CallBack_finishProcess callBack_finishProcess;
 
     //private static final String ARG_PARAM1 = "param1";
     //private static final String ARG_PARAM2 = "param2";
@@ -36,12 +27,12 @@ public class FragmentCar extends Fragment {
     //private String mParam1;
     //private String mParam2;
 
-    public FragmentCar() {
+    public FragmentDocuments() {
         // Required empty public constructor
     }
 
-    public static FragmentCar newInstance(String param1, String param2) {
-        FragmentCar fragment = new FragmentCar();
+    public static FragmentDocuments newInstance(String param1, String param2) {
+        FragmentDocuments fragment = new FragmentDocuments();
         Bundle args = new Bundle();
         //args.putString(ARG_PARAM1, param1);
         //args.putString(ARG_PARAM2, param2);
@@ -63,12 +54,12 @@ public class FragmentCar extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if (view == null)
-            view = inflater.inflate(R.layout.fragment_car, container, false);
+            view = inflater.inflate(R.layout.fragment_residential, container, false);
         // bind variables
         bindVariables();
         // load data from sharedPreferences
         loadData();
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+        btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveData();
@@ -78,11 +69,12 @@ public class FragmentCar extends Fragment {
         return view;
     }
 
-    public void setCallBack(CallBack_changeFragmentCarDetails callBack_changeFragmentCarDetails) {
-        this.callBack_changeFragmentCarDetails = callBack_changeFragmentCarDetails;
+    public void setCallBack(CallBack_finishProcess callBack_finishProcess) {
+        this.callBack_finishProcess = callBack_finishProcess;
     }
 
     private void bindVariables() {
+
     }
 
     private void loadData() {

@@ -20,6 +20,7 @@ import src.fragments.CallBack_changeFragmentPersonal;
 import src.fragments.CallBack_changeFragmentResidential;
 import src.fragments.CallBack_finishProcess;
 import src.fragments.FragmentCar;
+import src.fragments.FragmentDocuments;
 import src.fragments.FragmentPersonalInfo;
 import src.fragments.FragmentResidential;
 
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements
         stateProgressBar.setAnimationDuration(3000);
     }
 
+    // update car object with personal details and move to residential fragment
     @Override
     public void changeFragmentPersonal(PersonalDetails personalDetails) {
         car.setPersonalDetails(personalDetails);
@@ -94,17 +96,23 @@ public class MainActivity extends AppCompatActivity implements
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
     }
 
+    // update car object with car details and move to documents fragment
     @Override
     public void changeFragmentCarDetails(CarDetails carDetails) {
+        car.setCarDetails(carDetails);
+        FragmentDocuments fragmentDocuments = new FragmentDocuments();
+        fragmentDocuments.setCallBack(this);
+        initFragment(fragmentDocuments);
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
 
     }
 
+    // update car object with residential details and move to carDetails fragment
     @Override
     public void changeFragmentResidential(Residential residential) {
         car.setResidential(residential);
         FragmentCar fragmentCar = new FragmentCar();
-        //fragmentCar.setCallBack(this);
+        fragmentCar.setCallBack(this);
         initFragment(fragmentCar);
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
     }
@@ -114,12 +122,14 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    // return one state back
     @Override
     public void onBackPressed() {
         stateProgressBar.setCurrentStateNumber(getPrevStateNumber(stateProgressBar.getCurrentStateNumber()));
         super.onBackPressed();
     }
 
+    // return "StateProgressBar.StateNumber" object that represents the previews state number
     private StateProgressBar.StateNumber getPrevStateNumber(int currentStateNumber) {
         switch (currentStateNumber) {
             case 3:
