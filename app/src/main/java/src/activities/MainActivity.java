@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements
         fragmentDocuments.setCallBack(this);
         initFragment(fragmentDocuments);
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
-
     }
 
     // update car object with residential details and move to carDetails fragment

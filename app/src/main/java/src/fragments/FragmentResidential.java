@@ -108,7 +108,6 @@ public class FragmentResidential extends Fragment {
             } else {
                 residential.setResidentialState(ResidentialState.TENANTINRENT);
             }
-            //}
         });
     }
 

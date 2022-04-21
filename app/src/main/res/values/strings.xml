@@ -24,4 +24,6 @@
     <string name="permanentTenant">דייר קבוע</string>
     <string name="rentTenant">דייר בשכירות</string>
     <string name="documents">מסמכים</string>
+    <string name="car_title">רכב</string>
+    <string name="ownership">בעלות</string>
 </resources>

@@ -8,14 +8,20 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 
 import com.example.src.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.ArrayList;
 
 import src.Model.Car;
+import src.Model.CarDetails;
 import src.Model.PersonalDetails;
 import src.Model.Residential;
 import src.Utils.My_SP;
@@ -25,9 +31,9 @@ public class FragmentCar extends Fragment {
     private EditText carNumber;
     private EditText color;
     private EditText manufacturer;
-    private EditText ownership;
     private MaterialButton btnContinue;
-    private Car car;
+    private TextInputLayout til;
+    private CarDetails carDetails = new CarDetails();
     private My_SP sp = My_SP.getInstance();
     private CallBack_changeFragmentCarDetails callBack_changeFragmentCarDetails;
 
@@ -69,7 +75,22 @@ public class FragmentCar extends Fragment {
         bindVariables();
         // load data from sharedPreferences
         loadData();
-        btnContinue.setOnClickListener(v -> saveData());
+        btnContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveData();
+                callBack_changeFragmentCarDetails.changeFragmentCarDetails(carDetails);
+            }
+        });
+        ArrayList<String> items = new ArrayList<String>() {
+            {
+                add("PERSONAL");
+                add("WORK");
+                add("LISING");
+            }
+        };
+        ArrayAdapter adapter = new ArrayAdapter(requireContext(), R.layout.list_item, items);
+        ((AutoCompleteTextView) til.getEditText()).setAdapter(adapter);
         return view;
     }
 
@@ -78,7 +99,11 @@ public class FragmentCar extends Fragment {
     }
 
     private void bindVariables() {
+        carNumber = view.findViewById(R.id.car_EDT_carNumber);
+        color = view.findViewById(R.id.car_EDT_carColor);
+        manufacturer = view.findViewById(R.id.car_EDT_carManu);
         btnContinue = view.findViewById(R.id.car_BTN_continue);
+        til = view.findViewById(R.id.car_menu);
     }
 
     private void loadData() {

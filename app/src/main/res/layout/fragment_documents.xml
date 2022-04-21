@@ -125,7 +125,7 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/residential_BTN_continue"
+                android:id="@+id/documents_BTN_finish"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
@@ -142,5 +142,4 @@
                 android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
         </LinearLayout>
     </ScrollView>
-
 </FrameLayout>

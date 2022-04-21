@@ -63,6 +63,8 @@
             app:itemIconTint="@color/background_text_color"
             android:background="#F3F3F8"
             app:backgroundTint="#F3F3F8"
+            app:itemPaddingBottom="5dp"
+            app:itemPaddingTop="5dp"
             app:menu="@menu/bottom_navigation_menu"/>
     </RelativeLayout>
 

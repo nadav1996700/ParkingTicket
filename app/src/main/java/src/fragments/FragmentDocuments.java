@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.RadioButton;
 
 import androidx.fragment.app.Fragment;
 
@@ -54,7 +52,7 @@ public class FragmentDocuments extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if (view == null)
-            view = inflater.inflate(R.layout.fragment_residential, container, false);
+            view = inflater.inflate(R.layout.fragment_documents, container, false);
         // bind variables
         bindVariables();
         // load data from sharedPreferences
@@ -74,7 +72,7 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void bindVariables() {
-
+        btnFinish = view.findViewById(R.id.documents_BTN_finish);
     }
 
     private void loadData() {
