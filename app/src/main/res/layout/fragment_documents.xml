@@ -27,102 +27,85 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"/>
 
-            <EditText
-                android:id="@+id/residential_EDT_city"
-                android:layout_width="200dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:orientation="horizontal"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_edit_text"
-                android:hint="@string/city"
-                android:inputType="text"
-                android:padding="10dp"
-                android:textColor="#86818E"
-                android:textColorHint="#86818E" />
+                android:layout_marginStart="10dp"
+                android:gravity="end">
 
-            <EditText
-                android:id="@+id/residential_EDT_street"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_edit_text"
-                android:hint="@string/street"
-                android:inputType="text"
-                android:padding="10dp"
-                android:textColor="#86818E"
-                android:textColorHint="#86818E" />
+                <ImageButton
+                    android:id="@+id/documents_IMB_id"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1" />
 
-                <EditText
-                    android:id="@+id/residential_EDT_houseNumber"
-                    android:layout_width="200dp"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginTop="10dp"
-                    android:padding="10dp"
-                    android:background="@drawable/rounded_edit_text"
-                    android:cursorVisible="false"
-                    android:hint="@string/houseNumber"
-                    android:inputType="date"
-                    android:textColor="#86818E"
-                    android:textColorHint="#86818E" />
-
-            <EditText
-                android:id="@+id/residential_EDT_apartmentNumber"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_edit_text"
-                android:hint="@string/apartmentNumber"
-                android:inputType="text"
-                android:padding="10dp"
-                android:textColor="#86818E"
-                android:textColorHint="#86818E" />
-
-            <EditText
-                android:id="@+id/residential_EDT_postalCode"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_edit_text"
-                android:hint="@string/postalCode"
-                android:inputType="textEmailAddress"
-                android:padding="10dp"
-                android:textColor="#86818E"
-                android:textColorHint="#86818E" />
+                    android:text="@string/idDocument"
+                    android:layout_weight="1"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
                 android:orientation="horizontal"
-                android:layoutDirection="rtl">
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:gravity="end">
 
-                <RadioButton
-                    android:id="@+id/residential_RB_permanent"
-                    android:layout_width="wrap_content"
+                <ImageButton
+                    android:id="@+id/documents_IMB_drivingLicense"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:padding="10dp"
-                    android:text="@string/permanentTenant"/>
-
-                <RadioButton
-                    android:id="@+id/residential_RB_rent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:padding="10dp"
-                    android:text="@string/rentTenant"/>
-
+                    android:text="@string/drivingLicense"
+                    android:layout_weight="1"
+                    android:textSize="15sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="8dp"
+                android:gravity="end">
+
+                <ImageButton
+                    android:id="@+id/documents_IMB_carLicense"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/carLicense"
+                    android:layout_weight="1"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/documents_RB_terms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/useTerms"
+                android:layoutDirection="rtl"
+                android:layout_marginTop="8dp"
+                />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/documents_BTN_finish"

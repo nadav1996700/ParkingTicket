@@ -23,7 +23,11 @@
     <string name="postalCode">מיקוד</string>
     <string name="permanentTenant">דייר קבוע</string>
     <string name="rentTenant">דייר בשכירות</string>
-    <string name="documents">מסמכים</string>
+    <string name="documents">צירוף מסמכים</string>
     <string name="car_title">רכב</string>
     <string name="ownership">בעלות</string>
+    <string name="idDocument">תעודת זהות בצירוף ספח</string>
+    <string name="drivingLicense">רישיון נהיגה</string>
+    <string name="carLicense">רישיון רכב</string>
+    <string name="useTerms">קראתי והבנתי את תנאי השימוש</string>
 </resources>

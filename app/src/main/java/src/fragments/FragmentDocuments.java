@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.RadioButton;
 
 import androidx.fragment.app.Fragment;
 
@@ -16,6 +18,10 @@ import src.Utils.My_SP;
 public class FragmentDocuments extends Fragment {
     protected View view;
     private MaterialButton btnFinish;
+    private ImageButton id;
+    private ImageButton drivingLicense;
+    private ImageButton carLicense;
+    private RadioButton terms;
     private My_SP sp = My_SP.getInstance();
     private CallBack_finishProcess callBack_finishProcess;
 
@@ -72,10 +78,15 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void bindVariables() {
+        id = view.findViewById(R.id.documents_IMB_id);
+        drivingLicense = view.findViewById(R.id.documents_IMB_drivingLicense);
+        carLicense = view.findViewById(R.id.documents_IMB_carLicense);
+        terms = view.findViewById(R.id.documents_RB_terms);
         btnFinish = view.findViewById(R.id.documents_BTN_finish);
     }
 
     private void loadData() {
+        // load initial images
 
     }
 
