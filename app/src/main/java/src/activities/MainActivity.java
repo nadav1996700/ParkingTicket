@@ -1,7 +1,10 @@
 package src.activities;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,6 +18,7 @@ import src.Model.Car;
 import src.Model.CarDetails;
 import src.Model.PersonalDetails;
 import src.Model.Residential;
+import src.Utils.My_images;
 import src.fragments.CallBack_changeFragmentCarDetails;
 import src.fragments.CallBack_changeFragmentPersonal;
 import src.fragments.CallBack_changeFragmentResidential;
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private BottomNavigationView bnv;
     private StateProgressBar stateProgressBar;
+    private My_images images = My_images.getInstance();
     private final String[] descriptionData = {"אישי", "מגורים", "רכב", "מסמכים"};
     private final Car car = new Car();
 
@@ -137,6 +142,31 @@ public class MainActivity extends AppCompatActivity implements
                 return StateProgressBar.StateNumber.THREE;
             default:
                 return StateProgressBar.StateNumber.ONE;
+        }
+    }
+
+    /* handle images from gallery */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) { // id image
+            Drawable photo = images.convertDataToDrawable(data);
+            if (photo != null) {
+                ImageButton imageButton = findViewById(R.id.documents_IMB_id);
+                images.setImage(imageButton, photo);
+            }
+        } else if(requestCode == 2) { // Add_Driving_License_IMAGE
+            Drawable photo = images.convertDataToDrawable(data);
+            if (photo != null) {
+                ImageButton imageButton = findViewById(R.id.documents_IMB_drivingLicense);
+                images.setImage(imageButton, photo);
+            }
+        } else if(requestCode == 3) { // Add_Car_License_IMAGE
+            Drawable photo = images.convertDataToDrawable(data);
+            if (photo != null) {
+                ImageButton imageButton = findViewById(R.id.documents_IMB_carLicense);
+                images.setImage(imageButton, photo);
+            }
         }
     }
 }

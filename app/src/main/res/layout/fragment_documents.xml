@@ -1,15 +1,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#359bca"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context="src.fragments.FragmentDocuments">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,83 +20,89 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="@string/documents"
                 android:textColor="@color/black"
-                android:textStyle="bold"
                 android:textSize="20sp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:gravity="end">
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/documents_IMB_id"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/idDocument"
                     android:layout_weight="1"
+                    android:text="@string/idDocument"
                     android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
-                android:gravity="end">
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/documents_IMB_drivingLicense"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/drivingLicense"
                     android:layout_weight="1"
+                    android:text="@string/drivingLicense"
                     android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
-                android:gravity="end">
+                android:layout_marginEnd="10dp"
+                android:gravity="end"
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/documents_IMB_carLicense"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
+                    android:scaleType="fitCenter"
+                    android:adjustViewBounds="true"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/carLicense"
                     android:layout_weight="1"
+                    android:text="@string/carLicense"
                     android:textSize="15sp" />
             </LinearLayout>
 
@@ -102,10 +110,10 @@
                 android:id="@+id/documents_RB_terms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/useTerms"
-                android:layoutDirection="rtl"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="8dp"
-                />
+                android:layoutDirection="rtl"
+                android:text="@string/useTerms" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/documents_BTN_finish"
@@ -113,16 +121,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:text="@string/continue_next_page"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="15sp"
+                android:theme="@style/Theme.MaterialComponents.NoActionBar"
                 app:cornerRadius="20dp"
                 app:strokeColor="@color/colorPrimaryDark"
-                app:strokeWidth="2dp"
-                android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
+                app:strokeWidth="2dp" />
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

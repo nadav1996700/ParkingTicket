@@ -11,7 +11,6 @@ public class My_Firebase {
     private StorageReference storage_reference = storage.getReference();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference database_reference = database.getReference();
-    private String account_number;
 
     private My_Firebase() {
     }
@@ -40,13 +39,5 @@ public class My_Firebase {
 
     public void setStorage_reference(String ref) {
         this.storage_reference = storage.getReferenceFromUrl(ref);
-    }
-
-    public String getAccountNumber() {
-        return account_number;
-    }
-
-    public void setAccountNumber(String account) {
-        this.account_number = account;
     }
 }

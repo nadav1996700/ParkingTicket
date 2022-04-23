@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -38,6 +39,7 @@ public class My_images {
     }
 
     /* download image from firebase reference into placeholder */
+    /*
     public void downloadImageUrl(String ref, final ImageView imageView) {
         My_Firebase.getInstance().setStorage_reference(ref);
         StorageReference reference = My_Firebase.getInstance().getStorage_reference();
@@ -47,6 +49,14 @@ public class My_images {
                 setImageByUri(uri, imageView);
             }
         });
+    }
+     */
+
+    /* download image from firebase reference into placeholder */
+    public void downloadImageUrl(String ref, final ImageButton imageButton) {
+        My_Firebase.getInstance().setStorage_reference(ref);
+        StorageReference reference = My_Firebase.getInstance().getStorage_reference();
+        reference.getDownloadUrl().addOnSuccessListener(uri -> setImageByUri(uri, imageButton));
     }
 
     /* upload image from imageView to firebase storage */
@@ -64,20 +74,36 @@ public class My_images {
         reference.putBytes(data);
     }
 
+    /*
     private void setImageByUri(Uri uri, ImageView imageView) {
         Glide.with(context)
                 .load(uri)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView);
     }
+    */
+
+    private void setImageByUri(Uri uri, ImageButton imageButton) {
+        Glide.with(context)
+                .load(uri)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(imageButton);
+    }
 
     /* set images using glide library (by drawable) */
     public void setImage(ImageView imageView, Drawable photo) {
-        //ImageView imageView = activity.findViewById(download_placeholder);
         Glide.with(context)
                 .load(photo)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageView);
+    }
+
+    /* set images using glide library (by drawable) */
+    public void setImage(ImageButton imageButton, Drawable photo) {
+        Glide.with(context)
+                .load(photo)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(imageButton);
     }
 
     /* convert intent data (from gallery) into drawable */
