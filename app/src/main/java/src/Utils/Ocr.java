@@ -34,7 +34,7 @@ public class Ocr {
         return instance;
     }
 
-    private void setBitmap(Bitmap bitmap) {
+    public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
 
@@ -47,7 +47,7 @@ public class Ocr {
     }
 
 
-    private String getTextFromImage() {
+    public synchronized String getTextFromImage() {
         mFunctions = FirebaseFunctions.getInstance();
         String base64encoded = convertBitmapToBase64();
 
@@ -86,8 +86,9 @@ public class Ocr {
                         result = annotation.get("text").getAsString();
                     }
                 });
+
         // wait for result
-        while(result.isEmpty()) {}
+        while(result == null) {}
         return result;
     }
 

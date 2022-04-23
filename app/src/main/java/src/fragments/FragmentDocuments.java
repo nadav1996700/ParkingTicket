@@ -1,23 +1,24 @@
 package src.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.src.R;
 import com.google.android.material.button.MaterialButton;
 
-import src.Model.Residential;
-import src.Utils.My_Firebase;
 import src.Utils.My_SP;
 import src.Utils.My_images;
+import src.Utils.Ocr;
 
 public class FragmentDocuments extends Fragment {
     protected View view;
@@ -26,6 +27,7 @@ public class FragmentDocuments extends Fragment {
     private ImageButton drivingLicense;
     private ImageButton carLicense;
     private RadioButton terms;
+    private Ocr ocr = Ocr.getInstance();
     My_SP sp = My_SP.getInstance();
     My_images images = My_images.getInstance();
     private CallBack_finishProcess callBack_finishProcess;
@@ -72,7 +74,11 @@ public class FragmentDocuments extends Fragment {
             @Override
             public void onClick(View v) {
                 saveData();
-
+                BitmapDrawable drawable = (BitmapDrawable) id.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                ocr.setBitmap(bitmap);
+                String text = ocr.getTextFromImage();
+                Log.d("MYTEXT", "" + text);
             }
         });
         return view;
@@ -127,7 +133,7 @@ public class FragmentDocuments extends Fragment {
         //My_Firebase.getInstance().setReference("/2356534/carDetails/carId");
         //My_Firebase.getInstance().getReference().setValue("1234444");
         // load initial images
-        final String basis_path = "gs://parking-department-rh.appspot.com/parkingTicketApp/";
+        //final String basis_path = "gs://parking-department-rh.appspot.com/parkingTicketApp/";
         //images.downloadImageUrl(basis_path + "add_id_picture_parkingticket.png", id);
         //images.downloadImageUrl(basis_path + "drivingLicense.png", drivingLicense);
         //images.downloadImageUrl(basis_path + "carLicense.jpg", carLicense);
