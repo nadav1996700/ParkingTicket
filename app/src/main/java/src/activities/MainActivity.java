@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void finishProcess() {
+    public void finishProcess(String result) {
 
     }
 

@@ -11,14 +11,23 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.src.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
 
-import src.Utils.My_SP;
+import java.util.Arrays;
+
 import src.Utils.My_images;
-import src.Utils.Ocr;
 
 public class FragmentDocuments extends Fragment {
     protected View view;
@@ -27,37 +36,23 @@ public class FragmentDocuments extends Fragment {
     private ImageButton drivingLicense;
     private ImageButton carLicense;
     private RadioButton terms;
-    private Ocr ocr = Ocr.getInstance();
-    My_SP sp = My_SP.getInstance();
+    private String id_text;
+    private String car_license_text;
+    private String driving_license_text;
     My_images images = My_images.getInstance();
     private CallBack_finishProcess callBack_finishProcess;
-
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
-
-    //private String mParam1;
-    //private String mParam2;
 
     public FragmentDocuments() {
         // Required empty public constructor
     }
 
-    public static FragmentDocuments newInstance(String param1, String param2) {
-        FragmentDocuments fragment = new FragmentDocuments();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static FragmentDocuments newInstance() {
+        return new FragmentDocuments();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -68,20 +63,38 @@ public class FragmentDocuments extends Fragment {
             view = inflater.inflate(R.layout.fragment_documents, container, false);
         // bind variables
         bindVariables();
-        // load data from sharedPreferences
-        loadData();
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveData();
-                BitmapDrawable drawable = (BitmapDrawable) id.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-                ocr.setBitmap(bitmap);
-                String text = ocr.getTextFromImage();
-                Log.d("MYTEXT", "" + text);
+                // recognize text from images and validate the data
+                recognizeTextAndValidateData();
             }
         });
         return view;
+    }
+
+    private void recognizeTextAndValidateData() {
+        // detect text from id image
+        BitmapDrawable drawable = (BitmapDrawable) id.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        detectTextFromImage(bitmap, "id");
+        // detect text from driving license image
+        drawable = (BitmapDrawable) drivingLicense.getDrawable();
+        bitmap = drawable.getBitmap();
+        detectTextFromImage(bitmap, "driving");
+        // detect text from car license image
+        drawable = (BitmapDrawable) carLicense.getDrawable();
+        bitmap = drawable.getBitmap();
+        detectTextFromImage(bitmap, "car");
+
+        validateData();
+    }
+
+    private void validateData() {
+        final String desiredCity = "ראש העין"; // the city that the resident need to live in
+        // get data from id
+
+
     }
 
     public void setCallBack(CallBack_finishProcess callBack_finishProcess) {
@@ -95,6 +108,13 @@ public class FragmentDocuments extends Fragment {
         terms = view.findViewById(R.id.documents_RB_terms);
         btnFinish = view.findViewById(R.id.documents_BTN_finish);
         setListeners();
+        setInitialImages();
+    }
+
+    private void setInitialImages() {
+        images.setImage(id, ContextCompat.getDrawable(getContext(), R.drawable.add_id_picture_parkingticket));
+        images.setImage(drivingLicense, ContextCompat.getDrawable(getContext(), R.drawable.driving_license));
+        images.setImage(carLicense, ContextCompat.getDrawable(getContext(), R.drawable.car_license));
     }
 
     private void setListeners() {
@@ -129,33 +149,49 @@ public class FragmentDocuments extends Fragment {
         requireActivity().startActivityForResult(intent, code);
     }
 
-    private void loadData() {
-        //My_Firebase.getInstance().setReference("/2356534/carDetails/carId");
-        //My_Firebase.getInstance().getReference().setValue("1234444");
-        // load initial images
-        //final String basis_path = "gs://parking-department-rh.appspot.com/parkingTicketApp/";
-        //images.downloadImageUrl(basis_path + "add_id_picture_parkingticket.png", id);
-        //images.downloadImageUrl(basis_path + "drivingLicense.png", drivingLicense);
-        //images.downloadImageUrl(basis_path + "carLicense.jpg", carLicense);
-    }
+    // key - which image to detect text from
+    private void detectTextFromImage(Bitmap bitmap, String key) {
+        FirebaseVisionImage image = null;
+        try {
+            image = FirebaseVisionImage.fromBitmap(bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FirebaseVisionCloudDocumentRecognizerOptions options =
+                new FirebaseVisionCloudDocumentRecognizerOptions.Builder()
+                        .setLanguageHints(Arrays.asList("iw", "en"))
+                        .build();
+        FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance()
+                .getCloudDocumentTextRecognizer(options);
 
-    private void saveData() {
-
-    }
-
-    private boolean validateData() {
-        return true;
-    }
-
-    @Override
-    public void onPause() {
-        saveData();
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        loadData();
-        super.onResume();
+        detector.processImage(image)
+                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionDocumentText>() {
+                    @Override
+                    public void onSuccess(FirebaseVisionDocumentText result) {
+                        Log.d("MYTEXT", result.getText());
+                        // Task completed successfully
+                        switch (key) {
+                            case "id":
+                                id_text = result.getText();
+                                break;
+                            case "car":
+                                car_license_text = result.getText();
+                                validateData();
+                                break;
+                            case "driving":
+                                driving_license_text = result.getText();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Task failed with an exception
+                        Log.d("ERROR", "failed to detect text!!!");
+                    }
+                });
     }
 }
