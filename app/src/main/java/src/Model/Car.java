@@ -1,7 +1,7 @@
 package src.Model;
 
 public class Car {
-    private CarDetails carDetails;
+    private String carId;
     private PersonalDetails personalDetails;
     private Residential residential;
     private Pticket pticket;
@@ -10,19 +10,19 @@ public class Car {
         //empty public constructor
     }
 
-    public Car(CarDetails carDetails, PersonalDetails personalDetails, Residential residential, Pticket pticket) {
-        this.carDetails = carDetails;
+    public Car(String carId, PersonalDetails personalDetails, Residential residential, Pticket pticket) {
+        this.carId = carId;
         this.personalDetails = personalDetails;
         this.residential = residential;
         this.pticket = pticket;
     }
 
-    public CarDetails getCarDetails() {
-        return carDetails;
+    public String getCarId() {
+        return carId;
     }
 
-    public void setCarDetails(CarDetails carDetails) {
-        this.carDetails = carDetails;
+    public void setCarId(String carId) {
+        this.carId = carId;
     }
 
     public PersonalDetails getPersonalDetails() {

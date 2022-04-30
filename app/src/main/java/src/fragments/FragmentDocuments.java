@@ -1,5 +1,6 @@
 package src.fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -8,26 +9,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.src.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
-import com.google.firebase.ml.vision.text.FirebaseVisionText;
-import com.google.firebase.ml.vision.text.RecognizedLanguage;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +40,8 @@ public class FragmentDocuments extends Fragment {
     private ImageButton id;
     private ImageButton drivingLicense;
     private ImageButton carLicense;
-    private RadioButton terms;
+    private CheckBox terms;
+    private boolean errorFlag = false;
     My_images images = My_images.getInstance();
     private CallBack_finishProcess callBack_finishProcess;
 
@@ -66,8 +67,14 @@ public class FragmentDocuments extends Fragment {
         // bind variables
         bindVariables();
         btnFinish.setOnClickListener(v -> {
-            // recognize text from images and validate the data
-            recognizeTextAndValidateData();
+            if (!terms.isChecked()) {
+                Toast.makeText(getContext(), "יש לאשר את תנאי השימוש", Toast.LENGTH_LONG).show();
+            } else if (errorFlag) {
+                Toast.makeText(getContext(), "טעינת התמונות נכשלה", Toast.LENGTH_LONG).show();
+            } else {
+                // recognize text from images and validate the data
+                recognizeTextAndValidateData();
+            }
         });
         return view;
     }
@@ -85,13 +92,12 @@ public class FragmentDocuments extends Fragment {
         drawable = (BitmapDrawable) carLicense.getDrawable();
         bitmap = drawable.getBitmap();
         detectTextFromImage(bitmap, "car");
-
-        validateData();
     }
 
     private void validateData() {
         final String desiredCity = "ראש העין"; // the city that the resident need to live in
 
+        // end loading
 
     }
 
@@ -103,7 +109,7 @@ public class FragmentDocuments extends Fragment {
         id = view.findViewById(R.id.documents_IMB_id);
         drivingLicense = view.findViewById(R.id.documents_IMB_drivingLicense);
         carLicense = view.findViewById(R.id.documents_IMB_carLicense);
-        terms = view.findViewById(R.id.documents_RB_terms);
+        terms = view.findViewById(R.id.documents_CB_terms);
         btnFinish = view.findViewById(R.id.documents_BTN_finish);
         setListeners();
         setInitialImages();
@@ -116,8 +122,6 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void setListeners() {
-        terms.setOnClickListener(view -> terms.setChecked(!terms.isChecked()));
-
         id.setOnClickListener(view -> {
             getImageFromGallery(1); // add_Id_IMAGE
         });
@@ -172,31 +176,51 @@ public class FragmentDocuments extends Fragment {
                 .addOnFailureListener(e -> {
                     // Task failed with an exception
                     Log.d("ERROR", "failed to detect text!!!");
+                    e.printStackTrace();
+                    errorFlag = true;
                 });
     }
 
     private void extractTextFromIdTextResult(FirebaseVisionDocumentText result) {
         String id, expDate;
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
-        id = blockList.get(5).getText();
-        expDate = blockList.get(8).getText();
+        try {
+            id = blockList.get(5).getText();
+            expDate = blockList.get(8).getText();
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            errorFlag = true;
+        }
+
     }
 
     private void extractTextFromDrivingTextResult(FirebaseVisionDocumentText result) {
         String typeOfLicense, address, id, expDate;
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
-        typeOfLicense = blockList.get(0).getText();
-        address = blockList.get(5).getParagraphs().get(1).getText();
-        expDate = blockList.get(6).getParagraphs().get(0).getText();
-        id = blockList.get(7).getParagraphs().get(0).getWords().get(1).getText();
+        try {
+            typeOfLicense = blockList.get(0).getText();
+            address = blockList.get(5).getParagraphs().get(1).getText();
+            expDate = blockList.get(6).getParagraphs().get(0).getText();
+            id = blockList.get(7).getParagraphs().get(0).getWords().get(1).getText();
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            errorFlag = true;
+        }
+
     }
 
     private void extractTextFromCarLicenseTextResult(FirebaseVisionDocumentText result) {
         String typeOfLicense, id, expDate, carNumber;
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
-        carNumber = blockList.get(3).getText();
-        id = blockList.get(7).getParagraphs().get(2).getWords().get(2).getText();
-        expDate = blockList.get(14).getText();
-        typeOfLicense = blockList.get(15).getParagraphs().get(3).getWords().get(3).getText();
+        try {
+            carNumber = blockList.get(3).getText();
+            id = blockList.get(7).getParagraphs().get(2).getWords().get(2).getText();
+            expDate = blockList.get(14).getText();
+            typeOfLicense = blockList.get(15).getParagraphs().get(3).getWords().get(3).getText();
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            errorFlag = true;
+        }
+
     }
 }

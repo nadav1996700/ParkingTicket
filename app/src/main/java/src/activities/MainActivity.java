@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,15 +14,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 
 import src.Model.Car;
-import src.Model.CarDetails;
 import src.Model.PersonalDetails;
 import src.Model.Residential;
 import src.Utils.My_images;
-import src.fragments.CallBack_changeFragmentCarDetails;
 import src.fragments.CallBack_changeFragmentPersonal;
 import src.fragments.CallBack_changeFragmentResidential;
 import src.fragments.CallBack_finishProcess;
-import src.fragments.FragmentCar;
 import src.fragments.FragmentDocuments;
 import src.fragments.FragmentPersonalInfo;
 import src.fragments.FragmentResidential;
@@ -31,13 +27,12 @@ import src.fragments.FragmentResidential;
 public class MainActivity extends AppCompatActivity implements
         CallBack_changeFragmentPersonal,
         CallBack_changeFragmentResidential,
-        CallBack_changeFragmentCarDetails,
         CallBack_finishProcess {
 
     private BottomNavigationView bnv;
     private StateProgressBar stateProgressBar;
     private My_images images = My_images.getInstance();
-    private final String[] descriptionData = {"אישי", "מגורים", "רכב", "מסמכים"};
+    private final String[] descriptionData = {"אישי", "מגורים", "מסמכים"};
     private final Car car = new Car();
 
     @Override
@@ -101,28 +96,18 @@ public class MainActivity extends AppCompatActivity implements
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
     }
 
-    // update car object with car details and move to documents fragment
-    @Override
-    public void changeFragmentCarDetails(CarDetails carDetails) {
-        car.setCarDetails(carDetails);
-        FragmentDocuments fragmentDocuments = new FragmentDocuments();
-        fragmentDocuments.setCallBack(this);
-        initFragment(fragmentDocuments);
-        stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
-    }
-
     // update car object with residential details and move to carDetails fragment
     @Override
     public void changeFragmentResidential(Residential residential) {
         car.setResidential(residential);
-        FragmentCar fragmentCar = new FragmentCar();
-        fragmentCar.setCallBack(this);
-        initFragment(fragmentCar);
+        FragmentDocuments fragmentDocuments = new FragmentDocuments();
+        fragmentDocuments.setCallBack(this);
+        initFragment(fragmentDocuments);
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
     }
 
     @Override
-    public void finishProcess(String result) {
+    public void finishProcess(String result, String carId) {
 
     }
 

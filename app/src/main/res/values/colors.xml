@@ -21,6 +21,7 @@
     <color name="menu_text_color">#757377</color>
     <color name="ic_launcher_background">#1E74DC</color>
     <color name="menu_background">#EFEEF1</color>
+    <color name="transparent">#80FFFFFF</color>
 
     // sign in header colors
     <color name="color1">#005073</color>
