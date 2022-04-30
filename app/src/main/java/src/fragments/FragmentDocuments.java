@@ -24,8 +24,12 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.RecognizedLanguage;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import src.Utils.My_images;
 
@@ -36,9 +40,6 @@ public class FragmentDocuments extends Fragment {
     private ImageButton drivingLicense;
     private ImageButton carLicense;
     private RadioButton terms;
-    private String id_text;
-    private String car_license_text;
-    private String driving_license_text;
     My_images images = My_images.getInstance();
     private CallBack_finishProcess callBack_finishProcess;
 
@@ -92,7 +93,6 @@ public class FragmentDocuments extends Fragment {
 
     private void validateData() {
         final String desiredCity = "ראש העין"; // the city that the resident need to live in
-        // get data from id
 
 
     }
@@ -168,18 +168,17 @@ public class FragmentDocuments extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<FirebaseVisionDocumentText>() {
                     @Override
                     public void onSuccess(FirebaseVisionDocumentText result) {
-                        Log.d("MYTEXT", result.getText());
                         // Task completed successfully
                         switch (key) {
                             case "id":
-                                id_text = result.getText();
+                                extractTextFromIdTextResult(result);
                                 break;
                             case "car":
-                                car_license_text = result.getText();
+                                //extractTextFromCarLicenseTextResult(result);
                                 validateData();
                                 break;
                             case "driving":
-                                driving_license_text = result.getText();
+                                //extractTextFromDrivingTextResult(result);
                                 break;
                             default:
                                 break;
@@ -193,5 +192,58 @@ public class FragmentDocuments extends Fragment {
                         Log.d("ERROR", "failed to detect text!!!");
                     }
                 });
+    }
+
+    private void extractTextFromIdTextResult(FirebaseVisionDocumentText result) {
+        String firstName, lastName, id, expDate;
+        List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
+        int indexBlock = 1, indexParagraph = 1;
+        for (FirebaseVisionDocumentText.Block block: result.getBlocks()) {
+            String blockText = block.getText();
+            Log.d("Block-" + indexBlock, blockText);
+            for (FirebaseVisionDocumentText.Paragraph paragraph: block.getParagraphs()) {
+                String paragraphText = paragraph.getText();
+                Log.d("Paragraph-" + indexParagraph, paragraphText);
+                for (FirebaseVisionDocumentText.Word word: paragraph.getWords()) {
+                    String wordText = word.getText();
+                    Log.d("Word", wordText);
+                }
+                indexParagraph++;
+            }
+            indexBlock++;
+        }
+
+        /*
+        Log.d("expDate_Result", expDate);
+        Log.d("firstName_Result", firstName);
+        Log.d("lastName_Result", lastName);
+        Log.d("ID_Result", id);
+
+         */
+    }
+
+    private void extractTextFromDrivingTextResult(FirebaseVisionDocumentText result) {
+        String typeOfLicense, address, id, expDate;
+        List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
+        typeOfLicense = blockList.get(0).getText();
+        address = blockList.get(1).getParagraphs().get(2).getText();
+        expDate = blockList.get(5).getParagraphs().get(0).getWords().get(2).getText();
+        id = blockList.get(7).getParagraphs().get(0).getWords().get(6).getText();
+    }
+
+    private void extractTextFromCarLicenseTextResult(FirebaseVisionDocumentText result) {
+        String typeOfLicense, id, expDate;
+        for (FirebaseVisionDocumentText.Block block: result.getBlocks()) {
+            String blockText = block.getText();
+            Log.d("Block", blockText);
+            for (FirebaseVisionDocumentText.Paragraph paragraph: block.getParagraphs()) {
+                String paragraphText = paragraph.getText();
+                Log.d("Paragraph", paragraphText);
+                for (FirebaseVisionDocumentText.Word word: paragraph.getWords()) {
+                    String wordText = word.getText();
+                    Log.d("Word", wordText);
+                }
+            }
+        }
     }
 }
