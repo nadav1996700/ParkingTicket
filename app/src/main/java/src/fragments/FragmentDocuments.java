@@ -30,6 +30,7 @@ import com.google.firebase.ml.vision.text.RecognizedLanguage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import src.Utils.My_images;
 
@@ -57,19 +58,16 @@ public class FragmentDocuments extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if (view == null)
             view = inflater.inflate(R.layout.fragment_documents, container, false);
         // bind variables
         bindVariables();
-        btnFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // recognize text from images and validate the data
-                recognizeTextAndValidateData();
-            }
+        btnFinish.setOnClickListener(v -> {
+            // recognize text from images and validate the data
+            recognizeTextAndValidateData();
         });
         return view;
     }
@@ -118,27 +116,16 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void setListeners() {
-        terms.setOnClickListener(view -> {
-            terms.setChecked(!terms.isChecked());
-        });
+        terms.setOnClickListener(view -> terms.setChecked(!terms.isChecked()));
 
-        id.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getImageFromGallery(1); // add_Id_IMAGE
-            }
+        id.setOnClickListener(view -> {
+            getImageFromGallery(1); // add_Id_IMAGE
         });
-        drivingLicense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getImageFromGallery(2); // add_Driving_License_IMAGE
-            }
+        drivingLicense.setOnClickListener(view -> {
+            getImageFromGallery(2); // add_Driving_License_IMAGE
         });
-        carLicense.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getImageFromGallery(3); // add_Car_License_IMAGE
-            }
+        carLicense.setOnClickListener(view -> {
+            getImageFromGallery(3); // add_Car_License_IMAGE
         });
     }
 
@@ -164,86 +151,52 @@ public class FragmentDocuments extends Fragment {
         FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance()
                 .getCloudDocumentTextRecognizer(options);
 
-        detector.processImage(image)
-                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionDocumentText>() {
-                    @Override
-                    public void onSuccess(FirebaseVisionDocumentText result) {
-                        // Task completed successfully
-                        switch (key) {
-                            case "id":
-                                extractTextFromIdTextResult(result);
-                                break;
-                            case "car":
-                                //extractTextFromCarLicenseTextResult(result);
-                                validateData();
-                                break;
-                            case "driving":
-                                //extractTextFromDrivingTextResult(result);
-                                break;
-                            default:
-                                break;
-                        }
+        detector.processImage(Objects.requireNonNull(image))
+                .addOnSuccessListener(result -> {
+                    // Task completed successfully
+                    switch (key) {
+                        case "id":
+                            extractTextFromIdTextResult(result);
+                            break;
+                        case "car":
+                            extractTextFromCarLicenseTextResult(result);
+                            validateData();
+                            break;
+                        case "driving":
+                            extractTextFromDrivingTextResult(result);
+                            break;
+                        default:
+                            break;
                     }
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Task failed with an exception
-                        Log.d("ERROR", "failed to detect text!!!");
-                    }
+                .addOnFailureListener(e -> {
+                    // Task failed with an exception
+                    Log.d("ERROR", "failed to detect text!!!");
                 });
     }
 
     private void extractTextFromIdTextResult(FirebaseVisionDocumentText result) {
-        String firstName, lastName, id, expDate;
+        String id, expDate;
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
-        int indexBlock = 1, indexParagraph = 1;
-        for (FirebaseVisionDocumentText.Block block: result.getBlocks()) {
-            String blockText = block.getText();
-            Log.d("Block-" + indexBlock, blockText);
-            for (FirebaseVisionDocumentText.Paragraph paragraph: block.getParagraphs()) {
-                String paragraphText = paragraph.getText();
-                Log.d("Paragraph-" + indexParagraph, paragraphText);
-                for (FirebaseVisionDocumentText.Word word: paragraph.getWords()) {
-                    String wordText = word.getText();
-                    Log.d("Word", wordText);
-                }
-                indexParagraph++;
-            }
-            indexBlock++;
-        }
-
-        /*
-        Log.d("expDate_Result", expDate);
-        Log.d("firstName_Result", firstName);
-        Log.d("lastName_Result", lastName);
-        Log.d("ID_Result", id);
-
-         */
+        id = blockList.get(5).getText();
+        expDate = blockList.get(8).getText();
     }
 
     private void extractTextFromDrivingTextResult(FirebaseVisionDocumentText result) {
         String typeOfLicense, address, id, expDate;
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
         typeOfLicense = blockList.get(0).getText();
-        address = blockList.get(1).getParagraphs().get(2).getText();
-        expDate = blockList.get(5).getParagraphs().get(0).getWords().get(2).getText();
-        id = blockList.get(7).getParagraphs().get(0).getWords().get(6).getText();
+        address = blockList.get(5).getParagraphs().get(1).getText();
+        expDate = blockList.get(6).getParagraphs().get(0).getText();
+        id = blockList.get(7).getParagraphs().get(0).getWords().get(1).getText();
     }
 
     private void extractTextFromCarLicenseTextResult(FirebaseVisionDocumentText result) {
-        String typeOfLicense, id, expDate;
-        for (FirebaseVisionDocumentText.Block block: result.getBlocks()) {
-            String blockText = block.getText();
-            Log.d("Block", blockText);
-            for (FirebaseVisionDocumentText.Paragraph paragraph: block.getParagraphs()) {
-                String paragraphText = paragraph.getText();
-                Log.d("Paragraph", paragraphText);
-                for (FirebaseVisionDocumentText.Word word: paragraph.getWords()) {
-                    String wordText = word.getText();
-                    Log.d("Word", wordText);
-                }
-            }
-        }
+        String typeOfLicense, id, expDate, carNumber;
+        List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
+        carNumber = blockList.get(3).getText();
+        id = blockList.get(7).getParagraphs().get(2).getWords().get(2).getText();
+        expDate = blockList.get(14).getText();
+        typeOfLicense = blockList.get(15).getParagraphs().get(3).getWords().get(3).getText();
     }
 }
