@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import src.Model.DocumentHelper;
 import src.Utils.My_images;
 
 public class FragmentDocuments extends Fragment {
@@ -42,6 +43,7 @@ public class FragmentDocuments extends Fragment {
     private ImageButton carLicense;
     private CheckBox terms;
     private boolean errorFlag = false;
+    private DocumentHelper documentHelper = new DocumentHelper();
     My_images images = My_images.getInstance();
     private CallBack_finishProcess callBack_finishProcess;
 
@@ -182,11 +184,10 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void extractTextFromIdTextResult(FirebaseVisionDocumentText result) {
-        String id, expDate;
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
         try {
-            id = blockList.get(5).getText();
-            expDate = blockList.get(8).getText();
+            documentHelper.setId_from_idImage(blockList.get(5).getText());
+            documentHelper.setExpDate_from_idImage(blockList.get(8).getText());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             errorFlag = true;
@@ -195,13 +196,12 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void extractTextFromDrivingTextResult(FirebaseVisionDocumentText result) {
-        String typeOfLicense, address, id, expDate;
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
         try {
-            typeOfLicense = blockList.get(0).getText();
-            address = blockList.get(5).getParagraphs().get(1).getText();
-            expDate = blockList.get(6).getParagraphs().get(0).getText();
-            id = blockList.get(7).getParagraphs().get(0).getWords().get(1).getText();
+            documentHelper.setTypeOfLicense_from_drivingLicenseImage(blockList.get(0).getText());
+            documentHelper.setAddress_from_drivingLicenseImage(blockList.get(5).getParagraphs().get(1).getText());
+            documentHelper.setExpDate_from_drivingLicenseImage(blockList.get(6).getParagraphs().get(0).getText());
+            documentHelper.setId_from_drivingLicenseImage(blockList.get(7).getParagraphs().get(0).getWords().get(1).getText());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             errorFlag = true;
@@ -210,13 +210,12 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void extractTextFromCarLicenseTextResult(FirebaseVisionDocumentText result) {
-        String typeOfLicense, id, expDate, carNumber;
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
         try {
-            carNumber = blockList.get(3).getText();
-            id = blockList.get(7).getParagraphs().get(2).getWords().get(2).getText();
-            expDate = blockList.get(14).getText();
-            typeOfLicense = blockList.get(15).getParagraphs().get(3).getWords().get(3).getText();
+            documentHelper.setCarNumber_from_carLicenseImage(blockList.get(3).getText());
+            documentHelper.setId_from_carLicenseImage(blockList.get(7).getParagraphs().get(2).getWords().get(2).getText());
+            documentHelper.setExpDate_from_carLicenseImage(blockList.get(14).getText());
+            documentHelper.setTypeOfLicense_from_carLicenseImage(blockList.get(15).getParagraphs().get(3).getWords().get(3).getText());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             errorFlag = true;
