@@ -102,7 +102,6 @@ public class My_images {
     public void setImage(ImageButton imageButton, Drawable photo) {
         Glide.with(context)
                 .load(photo)
-                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(imageButton);
     }

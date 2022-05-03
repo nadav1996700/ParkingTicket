@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,12 +28,16 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
+import com.google.gson.Gson;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import src.Model.DocumentHelper;
+import src.Model.Residential;
+import src.Model.ResidentialState;
+import src.Utils.My_SP;
 import src.Utils.My_images;
 
 public class FragmentDocuments extends Fragment {
@@ -44,7 +49,7 @@ public class FragmentDocuments extends Fragment {
     private CheckBox terms;
     private boolean errorFlag = false;
     private DocumentHelper documentHelper = new DocumentHelper();
-    My_images images = My_images.getInstance();
+    private My_images images = My_images.getInstance();
     private CallBack_finishProcess callBack_finishProcess;
 
     public FragmentDocuments() {
@@ -97,8 +102,23 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void validateData() {
-        final String desiredCity = "ראש העין"; // the city that the resident need to live in
-
+        final String desiredCity = "פתח תקווה"; // the city that the resident need to live in
+        // check that the id's equals in all images
+        boolean test1 = documentHelper.getId_from_idImage().equals(documentHelper.getId_from_carLicenseImage()) &&
+                documentHelper.getId_from_carLicenseImage().equals(documentHelper.getId_from_drivingLicenseImage());
+        // check that the type of license equals between car license and driving license
+        boolean test2 = documentHelper.getTypeOfLicense_from_carLicenseImage().equals(documentHelper.getTypeOfLicense_from_drivingLicenseImage());
+        // check that the id, car license, and driving license is valid (by expiration date)
+        boolean test3 = !documentHelper.isDateExpired(documentHelper.getExpDate_from_carLicenseImage())
+                && !documentHelper.isDateExpired(documentHelper.getExpDate_from_drivingLicenseImage())
+                && !documentHelper.isDateExpired(documentHelper.getExpDate_from_idImage());
+        // check that the city in the driving license is equal to the desired city
+        boolean test4 = documentHelper.getAddress_from_drivingLicenseImage().contains(desiredCity);
+        if (test1 && test2 && test3 && test4) {
+            callBack_finishProcess.finishProcess("Success", documentHelper.getCarNumber_from_carLicenseImage());
+        } else {
+            callBack_finishProcess.finishProcess("Failure", "");
+        }
         // end loading
 
     }
@@ -152,7 +172,7 @@ public class FragmentDocuments extends Fragment {
         }
         FirebaseVisionCloudDocumentRecognizerOptions options =
                 new FirebaseVisionCloudDocumentRecognizerOptions.Builder()
-                        .setLanguageHints(Arrays.asList("iw", "en"))
+                        .setLanguageHints(Arrays.asList("iw", "en", "ar"))
                         .build();
         FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance()
                 .getCloudDocumentTextRecognizer(options);
@@ -185,41 +205,39 @@ public class FragmentDocuments extends Fragment {
 
     private void extractTextFromIdTextResult(FirebaseVisionDocumentText result) {
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
+
         try {
-            documentHelper.setId_from_idImage(blockList.get(5).getText());
-            documentHelper.setExpDate_from_idImage(blockList.get(8).getText());
+            documentHelper.setId_from_idImage(blockList.get(11).getText().trim().replace(" ", ""));
+            documentHelper.setExpDate_from_idImage(blockList.get(12).getText().trim());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             errorFlag = true;
         }
-
     }
 
     private void extractTextFromDrivingTextResult(FirebaseVisionDocumentText result) {
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
         try {
-            documentHelper.setTypeOfLicense_from_drivingLicenseImage(blockList.get(0).getText());
-            documentHelper.setAddress_from_drivingLicenseImage(blockList.get(5).getParagraphs().get(1).getText());
-            documentHelper.setExpDate_from_drivingLicenseImage(blockList.get(6).getParagraphs().get(0).getText());
-            documentHelper.setId_from_drivingLicenseImage(blockList.get(7).getParagraphs().get(0).getWords().get(1).getText());
+            documentHelper.setTypeOfLicense_from_drivingLicenseImage(blockList.get(9).getParagraphs().get(0).getWords().get(1).getText().trim());
+            documentHelper.setAddress_from_drivingLicenseImage(blockList.get(7).getText());
+            documentHelper.setExpDate_from_drivingLicenseImage(blockList.get(5).getParagraphs().get(0).getWords().get(0).getText().trim().substring(3));
+            documentHelper.setId_from_drivingLicenseImage(blockList.get(6).getParagraphs().get(0).getWords().get(1).getText().trim());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             errorFlag = true;
         }
-
     }
 
     private void extractTextFromCarLicenseTextResult(FirebaseVisionDocumentText result) {
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
         try {
-            documentHelper.setCarNumber_from_carLicenseImage(blockList.get(3).getText());
-            documentHelper.setId_from_carLicenseImage(blockList.get(7).getParagraphs().get(2).getWords().get(2).getText());
-            documentHelper.setExpDate_from_carLicenseImage(blockList.get(14).getText());
-            documentHelper.setTypeOfLicense_from_carLicenseImage(blockList.get(15).getParagraphs().get(3).getWords().get(3).getText());
+            documentHelper.setCarNumber_from_carLicenseImage(blockList.get(3).getText().trim());
+            documentHelper.setId_from_carLicenseImage(blockList.get(5).getParagraphs().get(2).getWords().get(2).getText().trim().replace("-", ""));
+            documentHelper.setExpDate_from_carLicenseImage(blockList.get(4).getText().trim().replace("/", "."));
+            documentHelper.setTypeOfLicense_from_carLicenseImage(blockList.get(5).getParagraphs().get(12).getWords().get(3).getText().trim());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             errorFlag = true;
         }
-
     }
 }

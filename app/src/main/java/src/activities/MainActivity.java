@@ -108,7 +108,11 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void finishProcess(String result, String carId) {
+        if(result.equals("Success")) {
 
+        } else if (result.equals("Failure")){
+
+        }
     }
 
     // return one state back

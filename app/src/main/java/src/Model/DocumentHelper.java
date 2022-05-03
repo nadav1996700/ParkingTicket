@@ -1,5 +1,12 @@
 package src.Model;
 
+import android.util.Log;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
+
 public class DocumentHelper {
     private String id_from_idImage;
     private String expDate_from_idImage;
@@ -13,6 +20,17 @@ public class DocumentHelper {
     private String carNumber_from_carLicenseImage;
 
     public DocumentHelper() {
+    }
+
+    public boolean isDateExpired(String date) {
+        Date expiry = null;
+        try {
+            expiry = new SimpleDateFormat("dd.MM.yyyy").parse(date);
+            Log.d("Date:", "" + expiry);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return Objects.requireNonNull(expiry).before(new Date());
     }
 
     public String getId_from_idImage() {
