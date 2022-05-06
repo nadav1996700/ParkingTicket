@@ -3,6 +3,7 @@ package src.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import src.fragments.CallBack_finishProcess;
 import src.fragments.FragmentDocuments;
 import src.fragments.FragmentPersonalInfo;
 import src.fragments.FragmentResidential;
+import src.fragments.FragmentSuccess;
 
 public class MainActivity extends AppCompatActivity implements
         CallBack_changeFragmentPersonal,
@@ -50,10 +52,12 @@ public class MainActivity extends AppCompatActivity implements
                 case R.id.page_2:
                     intent = new Intent(MainActivity.this, DataActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
                 case R.id.page_3:
                     intent = new Intent(MainActivity.this, StatusActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
                 default:
                     break;
@@ -107,19 +111,28 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void finishProcess(String result, String carId) {
-        if(result.equals("Success")) {
-
-        } else if (result.equals("Failure")){
-
-        }
+    public void finishProcess(String carId) {
+        stateProgressBar.setVisibility(View.GONE);
+        sendParkingTicket();
+        saveParkingTicketOnDB();
+        initFragment(new FragmentSuccess());
     }
 
-    // return one state back
+    private void saveParkingTicketOnDB() {
+    }
+
+    private void sendParkingTicket() {
+    }
+
+    // return one state back or get out of the app
     @Override
     public void onBackPressed() {
-        stateProgressBar.setCurrentStateNumber(getPrevStateNumber(stateProgressBar.getCurrentStateNumber()));
-        super.onBackPressed();
+        if (stateProgressBar.getCurrentStateNumber() == 1) {
+            finish();
+        } else {
+            stateProgressBar.setCurrentStateNumber(getPrevStateNumber(stateProgressBar.getCurrentStateNumber()));
+            super.onBackPressed();
+        }
     }
 
     // return "StateProgressBar.StateNumber" object that represents the previews state number
@@ -144,13 +157,13 @@ public class MainActivity extends AppCompatActivity implements
                 ImageButton imageButton = findViewById(R.id.documents_IMB_id);
                 images.setImage(imageButton, photo);
             }
-        } else if(requestCode == 2) { // Add_Driving_License_IMAGE
+        } else if (requestCode == 2) { // Add_Driving_License_IMAGE
             Drawable photo = images.convertDataToDrawable(data);
             if (photo != null) {
                 ImageButton imageButton = findViewById(R.id.documents_IMB_drivingLicense);
                 images.setImage(imageButton, photo);
             }
-        } else if(requestCode == 3) { // Add_Car_License_IMAGE
+        } else if (requestCode == 3) { // Add_Car_License_IMAGE
             Drawable photo = images.convertDataToDrawable(data);
             if (photo != null) {
                 ImageButton imageButton = findViewById(R.id.documents_IMB_carLicense);

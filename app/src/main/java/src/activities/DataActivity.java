@@ -23,10 +23,12 @@ public class DataActivity extends AppCompatActivity {
                 case R.id.page_1:
                     intent = new Intent(DataActivity.this, MainActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
                 case R.id.page_3:
                     intent = new Intent(DataActivity.this, StatusActivity.class);
                     startActivity(intent);
+                    finish();
                     break;
                 default:
                     break;
@@ -39,5 +41,11 @@ public class DataActivity extends AppCompatActivity {
     private void initVariables() {
         bnv = findViewById(R.id.main_NAV_navigation);
         bnv.setSelectedItemId(R.id.page_2);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

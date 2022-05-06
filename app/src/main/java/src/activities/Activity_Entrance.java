@@ -30,12 +30,9 @@ public class Activity_Entrance extends AppCompatActivity {
             setCenterImage();
             // wait DELAY time before enter the app
             final int DELAY = 5000;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    startActivity(new Intent(Activity_Entrance.this, MainActivity.class));
-                    finish();
-                }
+            new Handler().postDelayed(() -> {
+                startActivity(new Intent(Activity_Entrance.this, DataActivity.class));
+                finish();
             }, DELAY);
         }
     }

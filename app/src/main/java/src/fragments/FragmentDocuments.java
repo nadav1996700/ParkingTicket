@@ -1,5 +1,7 @@
 package src.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -49,10 +51,6 @@ public class FragmentDocuments extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentDocuments newInstance() {
-        return new FragmentDocuments();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +65,9 @@ public class FragmentDocuments extends Fragment {
         // bind variables
         bindVariables();
         btnFinish.setOnClickListener(v -> {
+            errorFlag = false;
             if (!terms.isChecked()) {
                 Toast.makeText(getContext(), "יש לאשר את תנאי השימוש", Toast.LENGTH_LONG).show();
-            } else if (errorFlag) {
-                Toast.makeText(getContext(), "טעינת התמונות נכשלה", Toast.LENGTH_LONG).show();
             } else {
                 pb.setVisibility(View.VISIBLE);
                 // recognize text from images and validate the data
@@ -96,25 +93,44 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void validateData() {
-        final String desiredCity = "פתח תקווה"; // the city that the resident need to live in
-        // check that the id's equals in all images
-        boolean test1 = documentHelper.getId_from_idImage().equals(documentHelper.getId_from_carLicenseImage()) &&
-                documentHelper.getId_from_carLicenseImage().equals(documentHelper.getId_from_drivingLicenseImage());
-        // check that the type of license equals between car license and driving license
-        boolean test2 = documentHelper.getTypeOfLicense_from_carLicenseImage().equals(documentHelper.getTypeOfLicense_from_drivingLicenseImage());
-        // check that the id, car license, and driving license is valid (by expiration date)
-        boolean test3 = !documentHelper.isDateExpired(documentHelper.getExpDate_from_carLicenseImage())
-                && !documentHelper.isDateExpired(documentHelper.getExpDate_from_drivingLicenseImage())
-                && !documentHelper.isDateExpired(documentHelper.getExpDate_from_idImage());
-        // check that the city in the driving license is equal to the desired city
-        boolean test4 = documentHelper.getAddress_from_drivingLicenseImage().contains(desiredCity);
-        if (test1 && test2 && test3 && test4) {
-            callBack_finishProcess.finishProcess("Success", documentHelper.getCarNumber_from_carLicenseImage());
-        } else {
-            callBack_finishProcess.finishProcess("Failure", "");
+        // the city that the resident need to live in
+        final String desiredCity = "פתח תקווה";
+        try {
+            // check that the id's equals in all images
+            boolean test1 = documentHelper.getId_from_idImage().equals(documentHelper.getId_from_carLicenseImage()) &&
+                    documentHelper.getId_from_carLicenseImage().equals(documentHelper.getId_from_drivingLicenseImage());
+            // check that the type of license equals between car license and driving license
+            boolean test2 = documentHelper.getTypeOfLicense_from_carLicenseImage().equals(documentHelper.getTypeOfLicense_from_drivingLicenseImage());
+            // check that the id, car license, and driving license is valid (by expiration date)
+            boolean test3 = !documentHelper.isDateExpired(documentHelper.getExpDate_from_carLicenseImage())
+                    && !documentHelper.isDateExpired(documentHelper.getExpDate_from_drivingLicenseImage())
+                    && !documentHelper.isDateExpired(documentHelper.getExpDate_from_idImage());
+            // check that the city in the driving license is equal to the desired city
+            boolean test4 = documentHelper.getAddress_from_drivingLicenseImage().contains(desiredCity);
+            if (test1 && test2 && test3 && test4) {
+                callBack_finishProcess.finishProcess(documentHelper.getCarNumber_from_carLicenseImage());
+            } else {
+                showErrorDialog("ודא שהתעודות בתוקף ושהפרטים תואמים בין התעודות");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErrorDialog("ודא שהתעודות בתוקף ושהפרטים תואמים בין התעודות");
+        } finally {
+            errorFlag = false;
         }
         // end loading
         pb.setVisibility(View.GONE);
+    }
+
+    private void showErrorDialog(String messege) {
+        new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom)
+                .setTitle("שגיאה בזיהוי הפרטים")
+                .setMessage(messege)
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(R.string.try_again, null)
+                .show();
     }
 
     public void setCallBack(CallBack_finishProcess callBack_finishProcess) {
@@ -178,14 +194,27 @@ public class FragmentDocuments extends Fragment {
                     // Task completed successfully
                     switch (key) {
                         case "id":
-                            extractTextFromIdTextResult(result);
+                            if (!errorFlag && !extractTextFromIdTextResult(result)) {
+                                pb.setVisibility(View.GONE);
+                                showErrorDialog("תעודת הזהות לא צולמה כראוי או שאינה בתוקף");
+                                errorFlag = true;
+                            }
                             break;
                         case "car":
-                            extractTextFromCarLicenseTextResult(result);
-                            validateData();
+                            if (!errorFlag && !extractTextFromCarLicenseTextResult(result)) {
+                                pb.setVisibility(View.GONE);
+                                showErrorDialog("רישיון הרכב לא צולם כראוי או שאינו בתוקף");
+                                errorFlag = true;
+                            } else if (!errorFlag) {
+                                validateData();
+                            }
                             break;
                         case "driving":
-                            extractTextFromDrivingTextResult(result);
+                            if (!errorFlag && !extractTextFromDrivingTextResult(result)) {
+                                pb.setVisibility(View.GONE);
+                                showErrorDialog("רישיון הנהיגה לא צולם כראוי או שאינו בתוקף");
+                                errorFlag = true;
+                            }
                             break;
                         default:
                             break;
@@ -199,19 +228,19 @@ public class FragmentDocuments extends Fragment {
                 });
     }
 
-    private void extractTextFromIdTextResult(FirebaseVisionDocumentText result) {
+    private boolean extractTextFromIdTextResult(FirebaseVisionDocumentText result) {
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
-
         try {
             documentHelper.setId_from_idImage(blockList.get(11).getText().trim().replace(" ", ""));
             documentHelper.setExpDate_from_idImage(blockList.get(12).getText().trim());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
-            errorFlag = true;
+            return false;
         }
+        return true;
     }
 
-    private void extractTextFromDrivingTextResult(FirebaseVisionDocumentText result) {
+    private boolean extractTextFromDrivingTextResult(FirebaseVisionDocumentText result) {
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
         try {
             documentHelper.setTypeOfLicense_from_drivingLicenseImage(blockList.get(9).getParagraphs().get(0).getWords().get(1).getText().trim());
@@ -220,11 +249,12 @@ public class FragmentDocuments extends Fragment {
             documentHelper.setId_from_drivingLicenseImage(blockList.get(6).getParagraphs().get(0).getWords().get(1).getText().trim());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
-            errorFlag = true;
+            return false;
         }
+        return true;
     }
 
-    private void extractTextFromCarLicenseTextResult(FirebaseVisionDocumentText result) {
+    private boolean extractTextFromCarLicenseTextResult(FirebaseVisionDocumentText result) {
         List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
         try {
             documentHelper.setCarNumber_from_carLicenseImage(blockList.get(3).getText().trim());
@@ -233,7 +263,8 @@ public class FragmentDocuments extends Fragment {
             documentHelper.setTypeOfLicense_from_carLicenseImage(blockList.get(5).getParagraphs().get(12).getWords().get(3).getText().trim());
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
-            errorFlag = true;
+            return false;
         }
+        return true;
     }
 }
