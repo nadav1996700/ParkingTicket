@@ -1,20 +1,16 @@
 package src.fragments;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,16 +24,12 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
-import com.google.gson.Gson;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import src.Model.DocumentHelper;
-import src.Model.Residential;
-import src.Model.ResidentialState;
-import src.Utils.My_SP;
 import src.Utils.My_images;
 
 public class FragmentDocuments extends Fragment {
@@ -51,6 +43,7 @@ public class FragmentDocuments extends Fragment {
     private DocumentHelper documentHelper = new DocumentHelper();
     private My_images images = My_images.getInstance();
     private CallBack_finishProcess callBack_finishProcess;
+    private ProgressBar pb;
 
     public FragmentDocuments() {
         // Required empty public constructor
@@ -79,6 +72,7 @@ public class FragmentDocuments extends Fragment {
             } else if (errorFlag) {
                 Toast.makeText(getContext(), "טעינת התמונות נכשלה", Toast.LENGTH_LONG).show();
             } else {
+                pb.setVisibility(View.VISIBLE);
                 // recognize text from images and validate the data
                 recognizeTextAndValidateData();
             }
@@ -120,7 +114,7 @@ public class FragmentDocuments extends Fragment {
             callBack_finishProcess.finishProcess("Failure", "");
         }
         // end loading
-
+        pb.setVisibility(View.GONE);
     }
 
     public void setCallBack(CallBack_finishProcess callBack_finishProcess) {
@@ -133,6 +127,8 @@ public class FragmentDocuments extends Fragment {
         carLicense = view.findViewById(R.id.documents_IMB_carLicense);
         terms = view.findViewById(R.id.documents_CB_terms);
         btnFinish = view.findViewById(R.id.documents_BTN_finish);
+        pb = view.findViewById(R.id.documents_PB_progressbar);
+        pb.setVisibility(View.GONE);
         setListeners();
         setInitialImages();
     }
