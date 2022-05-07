@@ -29,7 +29,8 @@ import src.Utils.My_images;
 import src.Utils.SendMail;
 import src.fragments.CallBack_changeFragmentPersonal;
 import src.fragments.CallBack_changeFragmentResidential;
-import src.fragments.CallBack_finishProcess;
+import src.fragments.CallBack_finishDataProcess;
+import src.fragments.CallBack_finishWithSuccess;
 import src.fragments.FragmentDocuments;
 import src.fragments.FragmentPersonalInfo;
 import src.fragments.FragmentResidential;
@@ -38,7 +39,8 @@ import src.fragments.FragmentSuccess;
 public class MainActivity extends AppCompatActivity implements
         CallBack_changeFragmentPersonal,
         CallBack_changeFragmentResidential,
-        CallBack_finishProcess {
+        CallBack_finishDataProcess,
+        CallBack_finishWithSuccess {
 
     private BottomNavigationView bnv;
     private StateProgressBar stateProgressBar;
@@ -122,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void finishProcess(String carId) {
+    public void finishDataProcess(String carId) {
         stateProgressBar.setVisibility(View.GONE);
         car.setCarId(carId);
         generatePticketId();
@@ -133,18 +135,24 @@ public class MainActivity extends AppCompatActivity implements
         db.getReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                pticket = new Pticket((Long)(Objects.requireNonNull(snapshot.getValue())) + 1);
+                pticket = new Pticket((Long) (Objects.requireNonNull(snapshot.getValue())) + 1);
                 db.setReference("/lastTicketId");
                 db.getReference().setValue(pticket.getTicketId());
                 sendParkingTicketByEmail();
                 saveParkingTicketOnDB();
-                initFragment(new FragmentSuccess());
+                initFragmentSuccess();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    private void initFragmentSuccess() {
+        FragmentSuccess fragmentSuccess = new FragmentSuccess();
+        fragmentSuccess.setCallBack(this);
+        initFragment(fragmentSuccess);
     }
 
     private void saveParkingTicketOnDB() {
@@ -157,8 +165,8 @@ public class MainActivity extends AppCompatActivity implements
         String email = car.getPersonalDetails().getEmail();
         String subject = "תו חניה";
         String message =
-                 "תו החניה שלך עבור רכב שמספרו: " + car.getCarId() + " הונפק בהצלחה." +
-        " ותוקפו למשך שנה, מספר תו החניה: " + pticket.getTicketId();
+                "תו החניה שלך עבור רכב שמספרו: " + car.getCarId() + " הונפק בהצלחה." +
+                        " ותוקפו למשך שנה, מספר תו החניה: " + pticket.getTicketId();
         SendMail sendMail = new SendMail(email, subject, message);
         sendMail.execute();
     }
@@ -209,5 +217,11 @@ public class MainActivity extends AppCompatActivity implements
                 images.setImage(imageButton, photo);
             }
         }
+    }
+
+    @Override
+    public void returnToDataActivity() {
+        startActivity(new Intent(MainActivity.this, DataActivity.class));
+        finish();
     }
 }

@@ -31,4 +31,8 @@
     <string name="drivingLicense">רישיון נהיגה</string>
     <string name="carLicense">רישיון רכב</string>
     <string name="useTerms">קראתי והבנתי את תנאי השימוש</string>
+    <string name="success_image">success image</string>
+    <string name="finish">סיום</string>
+    <string name="parkingTicketSent">תו החניה נשלח אליך במייל</string>
+    <string name="requestReceived">הפעולה הושלמה בהצלחה</string>
 </resources>

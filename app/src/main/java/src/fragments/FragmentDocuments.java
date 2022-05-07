@@ -45,7 +45,7 @@ public class FragmentDocuments extends Fragment {
     private boolean errorFlag = false;
     private DocumentHelper documentHelper = new DocumentHelper();
     private My_images images = My_images.getInstance();
-    private CallBack_finishProcess callBack_finishProcess;
+    private CallBack_finishDataProcess callBack_finishDataProcess;
     private ProgressDialog progressDialog;
 
     public FragmentDocuments() {
@@ -118,7 +118,7 @@ public class FragmentDocuments extends Fragment {
         }
         if (true) {
             //if (test1 && test2 && test3 && test4) {
-            callBack_finishProcess.finishProcess(documentHelper.getCarNumber_from_carLicenseImage());
+            callBack_finishDataProcess.finishDataProcess(documentHelper.getCarNumber_from_carLicenseImage());
         } else {
             showErrorDialog("ודא שהתעודות בתוקף ושהפרטים תואמים בין התעודות");
         }
@@ -137,8 +137,8 @@ public class FragmentDocuments extends Fragment {
                 .show();
     }
 
-    public void setCallBack(CallBack_finishProcess callBack_finishProcess) {
-        this.callBack_finishProcess = callBack_finishProcess;
+    public void setCallBack(CallBack_finishDataProcess callBack_finishProcess) {
+        this.callBack_finishDataProcess = callBack_finishProcess;
     }
 
     private void bindVariables() {
