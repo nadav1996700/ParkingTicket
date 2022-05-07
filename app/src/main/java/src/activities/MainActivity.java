@@ -6,18 +6,27 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.src.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.kofigyan.stateprogressbar.StateProgressBar;
+
+import java.util.Objects;
 
 import src.Model.Car;
 import src.Model.PersonalDetails;
+import src.Model.Pticket;
 import src.Model.Residential;
+import src.Utils.My_Firebase;
 import src.Utils.My_images;
+import src.Utils.SendMail;
 import src.fragments.CallBack_changeFragmentPersonal;
 import src.fragments.CallBack_changeFragmentResidential;
 import src.fragments.CallBack_finishProcess;
@@ -36,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements
     private My_images images = My_images.getInstance();
     private final String[] descriptionData = {"אישי", "מגורים", "מסמכים"};
     private final Car car = new Car();
+    private final My_Firebase db = My_Firebase.getInstance();
+    private Pticket pticket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
     }
 
-    // update car object with residential details and move to carDetails fragment
+    // update car object with residential details and move to documentDetails fragment
     @Override
     public void changeFragmentResidential(Residential residential) {
         car.setResidential(residential);
@@ -113,15 +124,43 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void finishProcess(String carId) {
         stateProgressBar.setVisibility(View.GONE);
-        sendParkingTicket();
-        saveParkingTicketOnDB();
-        initFragment(new FragmentSuccess());
+        car.setCarId(carId);
+        generatePticketId();
+    }
+
+    private void generatePticketId() {
+        db.setReference("/lastTicketId");
+        db.getReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                pticket = new Pticket((Long)(Objects.requireNonNull(snapshot.getValue())) + 1);
+                db.setReference("/lastTicketId");
+                db.getReference().setValue(pticket.getTicketId());
+                sendParkingTicketByEmail();
+                saveParkingTicketOnDB();
+                initFragment(new FragmentSuccess());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private void saveParkingTicketOnDB() {
+        car.setPticket(pticket);
+        db.setReference("/" + car.getCarId() + "/");
+        db.getReference().setValue(car);
     }
 
-    private void sendParkingTicket() {
+    private void sendParkingTicketByEmail() {
+        String email = car.getPersonalDetails().getEmail();
+        String subject = "תו חניה";
+        String message =
+                 "תו החניה שלך עבור רכב שמספרו: " + car.getCarId() + " הונפק בהצלחה." +
+        " ותוקפו למשך שנה, מספר תו החניה: " + pticket.getTicketId();
+        SendMail sendMail = new SendMail(email, subject, message);
+        sendMail.execute();
     }
 
     // return one state back or get out of the app

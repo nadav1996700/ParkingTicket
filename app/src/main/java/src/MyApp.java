@@ -8,6 +8,8 @@ import src.Utils.My_SP;
 import src.Utils.My_images;
 
 public class MyApp extends Application {
+    public static final String EMAIL ="nadav1996700@gmail.com";
+    public static final String PASSWORD ="pprvxeqknghmyxcr";
     @Override
     public void onCreate() {
         super.onCreate();

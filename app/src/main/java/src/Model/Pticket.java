@@ -1,7 +1,9 @@
 package src.Model;
 
+import java.util.Date;
+
 public class Pticket {
-    private String ticketId;
+    private Long ticketId;
     private Long expirationDate;
     private Long IssueDate;
 
@@ -9,33 +11,33 @@ public class Pticket {
         // empty constructor
     }
 
-    public Pticket(String ticketId, Long expirationDate, Long issueDate) {
+    public Pticket(Long ticketId) {
         this.ticketId = ticketId;
-        this.expirationDate = expirationDate;
-        IssueDate = issueDate;
+        this.IssueDate = new Date().getTime();
+        this.expirationDate = this.IssueDate + 31536000000L; // parking ticket expires after one year
     }
 
-    public String getTicketId() {
-        return ticketId;
-    }
+        public Long getTicketId () {
+            return ticketId;
+        }
 
-    public void setTicketId(String ticketId) {
-        this.ticketId = ticketId;
-    }
+        public void setTicketId (Long ticketId){
+            this.ticketId = ticketId;
+        }
 
-    public Long getExpirationDate() {
-        return expirationDate;
-    }
+        public Long getExpirationDate () {
+            return expirationDate;
+        }
 
-    public void setExpirationDate(Long expirationDate) {
-        this.expirationDate = expirationDate;
-    }
+        public void setExpirationDate (Long expirationDate){
+            this.expirationDate = expirationDate;
+        }
 
-    public Long getIssueDate() {
-        return IssueDate;
-    }
+        public Long getIssueDate () {
+            return IssueDate;
+        }
 
-    public void setIssueDate(Long issueDate) {
-        IssueDate = issueDate;
+        public void setIssueDate (Long issueDate){
+            IssueDate = issueDate;
+        }
     }
-}
