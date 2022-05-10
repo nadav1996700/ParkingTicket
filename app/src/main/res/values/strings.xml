@@ -35,4 +35,10 @@
     <string name="finish">סיום</string>
     <string name="parkingTicketSent">תו החניה נשלח אליך במייל</string>
     <string name="requestReceived">הפעולה הושלמה בהצלחה</string>
+    <string name="carNumber">מספר רכב</string>
+    <string name="checkParkingTicketText">הקלד מספר רכב ומספר תו חניה שתואם לרכב על מנת לבדוק האם תו החניה שברשותך בתוקף</string>
+    <string name="checkParkingTicketStatusTitle">בדיקת סטטוס תו חניה</string>
+    <string name="ParkingTicketNumber">מספר תו חניה</string>
+    <string name="check">בדיקה</string>
+    <string name="close">סגור</string>
 </resources>

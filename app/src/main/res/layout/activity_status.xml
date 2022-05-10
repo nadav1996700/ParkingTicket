@@ -4,37 +4,87 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/teal_700"
+    android:orientation="vertical"
     tools:context="src.activities.StatusActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="14"
-        android:gravity="center">
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Activity Status"
-            android:textSize="40sp"
-            android:layout_gravity="center">
-        </TextView>
-    </RelativeLayout>
+            android:layout_marginBottom="30dp"
+            android:text="@string/checkParkingTicketStatusTitle"
+            android:textColor="@color/white"
+            android:textDirection="rtl"
+            android:textSize="30sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+            android:text="@string/checkParkingTicketText"
+            android:textColor="@color/white"
+            android:textDirection="rtl"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/status_EDT_carNumber"
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:background="@color/white"
+            android:hint="@string/carNumber"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textDirection="rtl" />
+
+        <EditText
+            android:id="@+id/status_EDT_parkingTicketNumber"
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/white"
+            android:hint="@string/ParkingTicketNumber"
+            android:inputType="numberDecimal"
+            android:padding="10dp"
+            android:textColor="@color/black"
+            android:textDirection="rtl" />
+
+        <Button
+            android:id="@+id/status_BTN_check"
+            android:layout_width="230dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="100dp"
+            android:background="@drawable/rounded_edit_text"
+            android:text="@string/check"
+            android:textColor="@color/teal_700"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.3">
+        android:layout_weight="0.25">
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/main_NAV_navigation"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#F3F3F8"
-            app:itemTextColor="@color/background_text_color"
-            app:itemIconTint="@color/background_text_color"
             app:backgroundTint="#F3F3F8"
-            app:menu="@menu/bottom_navigation_menu"/>
+            app:itemIconTint="@color/background_text_color"
+            app:itemTextColor="@color/background_text_color"
+            app:menu="@menu/bottom_navigation_menu" />
     </RelativeLayout>
 
 </LinearLayout>

@@ -1,7 +1,5 @@
 package src.Model;
 
-import java.util.Date;
-
 public class Pticket {
     private Long ticketId;
     private Long expirationDate;
@@ -13,7 +11,7 @@ public class Pticket {
 
     public Pticket(Long ticketId) {
         this.ticketId = ticketId;
-        this.IssueDate = new Date().getTime();
+        this.IssueDate = System.currentTimeMillis();
         this.expirationDate = this.IssueDate + 31536000000L; // parking ticket expires after one year
     }
 

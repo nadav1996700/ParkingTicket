@@ -1,15 +1,33 @@
 package src.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.src.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
+
+import src.Utils.My_Firebase;
 
 public class StatusActivity extends AppCompatActivity {
     private BottomNavigationView bnv;
+    private EditText parkingTicketNumber;
+    private EditText carNumber;
+    private Button checkButton;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +51,97 @@ public class StatusActivity extends AppCompatActivity {
             }
             return true;
         });
+
+        carNumber.setOnClickListener(view -> {
+            carNumber.setError(null);
+        });
+
+        parkingTicketNumber.setOnClickListener(view -> {
+            parkingTicketNumber.setError(null);
+        });
+
+        checkButton.setOnClickListener(view -> {
+            checkParkingTicketStatus();
+        });
+    }
+
+    private void checkParkingTicketStatus() {
+        carNumber.setError(null);
+        parkingTicketNumber.setError(null);
+        String _carNumber = carNumber.getText().toString();
+        String _parkingTicketNumber = parkingTicketNumber.getText().toString();
+        if (_carNumber.length() != 7 && _carNumber.length() != 8) {
+            carNumber.setError("מספר רכב חייב להיות בן 7 או 8 ספרות!");
+        } else if (_parkingTicketNumber.isEmpty()) {
+            parkingTicketNumber.setError("הקלד מספר תו חניה!");
+        } else {
+            checkOnDB(_carNumber, _parkingTicketNumber);
+        }
+    }
+
+    private void checkOnDB(String _carNumber, String _parkingTicketNumber) {
+        My_Firebase db = My_Firebase.getInstance();
+        db.setReference("/" + _carNumber);
+        db.getReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    showErrorDialog("מספר הרכב שהוקלד לא קיים במערכת");
+                } else {
+                    long ticketId = (long) snapshot.child("/pticket/ticketId").getValue();
+                    if (ticketId != Long.parseLong(_parkingTicketNumber)) {
+                        showErrorDialog("מספר תו החניה לא תואם למספר הרכב או שאינו קיים");
+                    } else {
+                        String expDateStr = Objects.requireNonNull(snapshot.child("/pticket/expirationDate").getValue()).toString();
+                        long expDate = Long.parseLong(expDateStr.substring(0, expDateStr.length() - 1));
+                        long millis = System.currentTimeMillis();
+                        if (expDate < millis) {
+                            // date expired
+                            showErrorDialog("תו החניה לא בתוקף!");
+                        } else {
+                            // parking ticket is valid
+                            showSuccessDialog(expDate);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("ERROR", error.getMessage());
+            }
+        });
+    }
+
+    private void showErrorDialog(String message) {
+        new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                .setTitle("שגיאה בזיהוי הפרטים")
+                .setMessage(message)
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(R.string.close, null)
+                .show();
+    }
+
+    private void showSuccessDialog(long expDate) {
+        String message = "תו החניה בתוקף עד לתאריך: " + expDate;
+        new AlertDialog.Builder(this, R.style.AlertDialogCustom)
+                .setTitle("תוצאות הבדיקה")
+                .setMessage(message)
+
+                // Specifying a listener allows you to take an action before dismissing the dialog.
+                // The dialog is automatically dismissed when a dialog button is clicked.
+                .setPositiveButton(R.string.close, null)
+                .show();
     }
 
     /* initialize variables */
     private void initVariables() {
         bnv = findViewById(R.id.main_NAV_navigation);
         bnv.setSelectedItemId(R.id.page_3);
+        parkingTicketNumber = findViewById(R.id.status_EDT_parkingTicketNumber);
+        carNumber = findViewById(R.id.status_EDT_carNumber);
+        checkButton = findViewById(R.id.status_BTN_check);
     }
 }
