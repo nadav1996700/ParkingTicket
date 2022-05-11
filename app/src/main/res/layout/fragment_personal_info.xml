@@ -1,15 +1,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/teal_700"
+    android:background="@drawable/background_status"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context="src.fragments.FragmentPersonalInfo">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,22 +20,22 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/personal_details_title"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                android:textSize="20sp"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/personal_details_title"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/personalInfo_EDT_firstName"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/rounded_edit_text"
                 android:hint="@string/private_name"
                 android:inputType="text"
@@ -46,8 +48,8 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/rounded_edit_text"
                 android:hint="@string/family_name"
                 android:inputType="text"
@@ -58,35 +60,35 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                android:orientation="horizontal"
-                android:layoutDirection="rtl">
+                android:layout_marginTop="10dp"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/personalInfo_EDT_pickDate"
                     android:layout_width="0dp"
-                    android:layout_weight=".70"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
-                    android:padding="10dp"
+                    android:layout_weight=".70"
                     android:background="@drawable/rounded_edit_text"
                     android:cursorVisible="false"
                     android:enabled="false"
                     android:hint="@string/pick_birthday_date"
                     android:inputType="date"
+                    android:padding="10dp"
                     android:textColor="#86818E"
                     android:textColorHint="#86818E" />
 
                 <ImageButton
                     android:id="@+id/personalInfo_BTN_pickDate"
                     android:layout_width="0dp"
-                    android:layout_weight=".20"
                     android:layout_height="60dp"
                     android:layout_marginEnd="5dp"
-                    android:backgroundTint="@color/teal_700"
-                    android:scaleType="fitXY"
+                    android:layout_weight=".20"
+                    android:backgroundTint="@color/transparent"
                     android:elevation="6dp"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic__calender" />
 
             </LinearLayout>
@@ -96,8 +98,8 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/rounded_edit_text"
                 android:hint="@string/enter_id"
                 android:inputType="text"
@@ -110,8 +112,8 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/rounded_edit_text"
                 android:hint="דואר אלקטרוני"
                 android:inputType="textEmailAddress"
@@ -122,21 +124,21 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
-                android:orientation="horizontal"
-                android:layoutDirection="rtl">
+                android:layout_marginTop="10dp"
+                android:layoutDirection="rtl"
+                android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/personalInfo_EDT_phone"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
-                    android:padding="10dp"
                     android:background="@drawable/rounded_edit_text"
                     android:cursorVisible="false"
                     android:hint="@string/private_number"
                     android:inputType="numberDecimal"
+                    android:padding="10dp"
                     android:textColor="#86818E"
                     android:textColorHint="#86818E" />
 
@@ -148,16 +150,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="end"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
                 android:text="@string/continue_next_page"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/white"
                 android:textSize="15sp"
+                android:textStyle="bold"
+                android:theme="@style/Theme.MaterialComponents.NoActionBar"
                 app:cornerRadius="20dp"
-                app:strokeColor="@color/colorPrimaryDark"
-                app:strokeWidth="2dp"
-                android:theme="@style/Theme.MaterialComponents.NoActionBar"/>
+                app:strokeColor="#CD37E6"
+                app:strokeWidth="2dp" />
         </LinearLayout>
     </ScrollView>
 

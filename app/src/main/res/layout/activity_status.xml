@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_700"
     android:orientation="vertical"
+    android:background="@drawable/background_status"
     tools:context="src.activities.StatusActivity">
 
     <LinearLayout
@@ -65,7 +65,7 @@
             android:layout_marginTop="100dp"
             android:background="@drawable/rounded_edit_text"
             android:text="@string/check"
-            android:textColor="@color/teal_700"
+            android:textColor="#3F51B5"
             android:textSize="20sp" />
 
 
