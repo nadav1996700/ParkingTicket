@@ -16,6 +16,9 @@ import com.example.src.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 
+import java.util.Date;
+import java.util.regex.Pattern;
+
 import src.Model.PersonalDetails;
 import src.Utils.DatePickerFragment;
 import src.Utils.My_SP;
@@ -38,24 +41,9 @@ public class FragmentPersonalInfo extends Fragment {
         // Required empty public constructor
     }
 
-    public static FragmentPersonalInfo newInstance(String param1, String param2) {
-        FragmentPersonalInfo fragment = new FragmentPersonalInfo();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        */
     }
 
     @Override
@@ -95,6 +83,16 @@ public class FragmentPersonalInfo extends Fragment {
     }
 
     private boolean validateData() {
+        if (!Pattern.matches("[0-9]{9}", id.getText().toString())) {
+            id.setError("תעודת זהות חייבת להיות מורכבת מ-9 ספרות בלבד!");
+            return false;
+        } else if (!Pattern.matches("^(.+)@(.+)$", email.getText().toString())) {
+            email.setError("אימייל לא תיקני!");
+            return false;
+        } else if (!Pattern.matches("[0-9]{9,10}", phone.getText().toString())) {
+            phone.setError("טלפון מורכב מתשע או עשר ספרות בלבד!");
+            return false;
+        }
         return true;
     }
 

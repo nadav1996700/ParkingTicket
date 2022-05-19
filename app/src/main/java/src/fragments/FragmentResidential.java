@@ -17,6 +17,8 @@ import com.example.src.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 
+import java.util.regex.Pattern;
+
 import src.Model.PersonalDetails;
 import src.Model.Residential;
 import src.Model.ResidentialState;
@@ -37,32 +39,13 @@ public class FragmentResidential extends Fragment {
     private My_SP sp = My_SP.getInstance();
     private CallBack_changeFragmentResidential callBack_changeFragmentResidential;
 
-    //private static final String ARG_PARAM1 = "param1";
-    //private static final String ARG_PARAM2 = "param2";
-
-    //private String mParam1;
-    //private String mParam2;
-
     public FragmentResidential() {
         // Required empty public constructor
-    }
-
-    public static FragmentResidential newInstance(String param1, String param2) {
-        FragmentResidential fragment = new FragmentResidential();
-        Bundle args = new Bundle();
-        //args.putString(ARG_PARAM1, param1);
-        //args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -144,6 +127,16 @@ public class FragmentResidential extends Fragment {
     }
 
     private boolean validateData() {
+        if (!Pattern.matches("[0-9]{1,3}", houseNumber.getText().toString())) {
+            houseNumber.setError("מספר בית אינו תיקני!");
+            return false;
+        } else if (!Pattern.matches("[0-9]{1,2}", apartmentNumber.getText().toString())) {
+            apartmentNumber.setError("מספר דירה אינו תיקני!");
+            return false;
+        } else if (!Pattern.matches("[0-9]{7}", postalCode.getText().toString())) {
+            postalCode.setError("מיקוד אינו תיקני!");
+            return false;
+        }
         return true;
     }
 
