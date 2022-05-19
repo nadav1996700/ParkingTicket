@@ -12,7 +12,7 @@ public class Residential {
         // empty constructor
     }
 
-    public Residential(String city, String street, String houseNumber,String apartmentNumber, String postalCode, ResidentialState residentialState) {
+    public Residential(String city, String street, String houseNumber, String apartmentNumber, String postalCode, ResidentialState residentialState) {
         this.city = city;
         this.street = street;
         this.houseNumber = houseNumber;

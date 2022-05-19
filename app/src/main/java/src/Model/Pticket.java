@@ -15,27 +15,27 @@ public class Pticket {
         this.expirationDate = this.IssueDate + 31536000000L; // parking ticket expires after one year
     }
 
-        public Long getTicketId () {
-            return ticketId;
-        }
-
-        public void setTicketId (Long ticketId){
-            this.ticketId = ticketId;
-        }
-
-        public Long getExpirationDate () {
-            return expirationDate;
-        }
-
-        public void setExpirationDate (Long expirationDate){
-            this.expirationDate = expirationDate;
-        }
-
-        public Long getIssueDate () {
-            return IssueDate;
-        }
-
-        public void setIssueDate (Long issueDate){
-            IssueDate = issueDate;
-        }
+    public Long getTicketId() {
+        return ticketId;
     }
+
+    public void setTicketId(Long ticketId) {
+        this.ticketId = ticketId;
+    }
+
+    public Long getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Long expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public Long getIssueDate() {
+        return IssueDate;
+    }
+
+    public void setIssueDate(Long issueDate) {
+        IssueDate = issueDate;
+    }
+}
