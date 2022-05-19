@@ -12,7 +12,7 @@ public class Pticket {
     public Pticket(Long ticketId) {
         this.ticketId = ticketId;
         this.IssueDate = System.currentTimeMillis();
-        this.expirationDate = this.IssueDate + 31536000000L; // parking ticket expires after one year
+        this.expirationDate = this.IssueDate + 94608000000L; // parking ticket expires after three years
     }
 
     public Long getTicketId() {

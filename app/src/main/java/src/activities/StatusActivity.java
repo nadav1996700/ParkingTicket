@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,10 +16,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 import src.Utils.My_Firebase;
-import src.Utils.My_images;
 
 public class StatusActivity extends AppCompatActivity {
     private BottomNavigationView bnv;
@@ -92,7 +91,7 @@ public class StatusActivity extends AppCompatActivity {
                         showErrorDialog("מספר תו החניה לא תואם למספר הרכב או שאינו קיים");
                     } else {
                         String expDateStr = Objects.requireNonNull(snapshot.child("/pticket/expirationDate").getValue()).toString();
-                        long expDate = Long.parseLong(expDateStr.substring(0, expDateStr.length() - 1));
+                        long expDate = Long.parseLong(expDateStr);
                         long millis = System.currentTimeMillis();
                         if (expDate < millis) {
                             // date expired
@@ -124,7 +123,10 @@ public class StatusActivity extends AppCompatActivity {
     }
 
     private void showSuccessDialog(long expDate) {
-        String message = "תו החניה בתוקף עד לתאריך: " + expDate;
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(expDate);
+        String date = c.get(Calendar.DAY_OF_MONTH) + "/" + c.get(Calendar.MONTH) + "/" + c.get(Calendar.YEAR);
+        String message = "תו החניה בתוקף עד לתאריך: " + date;
         new AlertDialog.Builder(this, R.style.AlertDialogCustom)
                 .setTitle("תוצאות הבדיקה")
                 .setMessage(message)
