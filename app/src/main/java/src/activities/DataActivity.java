@@ -1,12 +1,16 @@
 package src.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.src.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import src.fragments.FragmentData;
 
 public class DataActivity extends AppCompatActivity {
     private BottomNavigationView bnv;
@@ -17,6 +21,7 @@ public class DataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_data);
 
         initVariables();
+        initFragment(new FragmentData());
         bnv.setOnItemSelectedListener(item -> {
             Intent intent;
             switch (item.getItemId()) {
@@ -35,6 +40,20 @@ public class DataActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    /* start new fragment */
+    private void initFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction()
+                .setCustomAnimations(
+                        R.anim.slide_in,  // enter
+                        R.anim.fade_out,  // exit
+                        R.anim.fade_in,   // popEnter
+                        R.anim.slide_out  // popExit
+                );
+        transaction.replace(R.id.data_FRAG_fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     /* initialize variables */
