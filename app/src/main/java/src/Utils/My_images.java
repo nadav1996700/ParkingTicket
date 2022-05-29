@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
@@ -39,20 +38,6 @@ public class My_images {
     }
 
     /* download image from firebase reference into placeholder */
-    /*
-    public void downloadImageUrl(String ref, final ImageView imageView) {
-        My_Firebase.getInstance().setStorage_reference(ref);
-        StorageReference reference = My_Firebase.getInstance().getStorage_reference();
-        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                setImageByUri(uri, imageView);
-            }
-        });
-    }
-     */
-
-    /* download image from firebase reference into placeholder */
     public void downloadImageUrl(String ref, final ImageButton imageButton) {
         My_Firebase.getInstance().setStorage_reference(ref);
         StorageReference reference = My_Firebase.getInstance().getStorage_reference();
@@ -73,15 +58,6 @@ public class My_images {
         byte[] data = baos.toByteArray();
         reference.putBytes(data);
     }
-
-    /*
-    private void setImageByUri(Uri uri, ImageView imageView) {
-        Glide.with(context)
-                .load(uri)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(imageView);
-    }
-    */
 
     private void setImageByUri(Uri uri, ImageButton imageButton) {
         Glide.with(context)

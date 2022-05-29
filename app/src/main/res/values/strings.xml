@@ -27,7 +27,7 @@
     <string name="documents">צירוף מסמכים</string>
     <string name="car_title">רכב</string>
     <string name="ownership">בעלות</string>
-    <string name="idDocument">תעודת זהות בצירוף ספח</string>
+    <string name="idDocument">תעודת זהות</string>
     <string name="drivingLicense">רישיון נהיגה</string>
     <string name="carLicense">רישיון רכב</string>
     <string name="useTerms">קראתי והבנתי את תנאי השימוש</string>
@@ -42,4 +42,14 @@
     <string name="check">בדיקה</string>
     <string name="close">סגור</string>
     <string name="contact_us">טלפון- 03-9383278 פקס- 03-9381261 מענה טלפוני בימים א׳-ה׳, בין השעות 08:30-15:00</string>
+    <string name="welcome">ברוכים הבאים!</string>
+    <string name="conditions">תנאים להנפקת תו חניה:</string>
+    <string name="condition_one">1. כתובת מגורים עדכנית בראש העין הרשומה במשרד הפנים.</string>
+    <string name="condition_two">2. בעלות על הרכב.</string>
+    <string name="condition_three">3. רישיון רכב, תעודת זהות ורישיון נהיגה בתוקף.</string>
+    <string name="validTicketTime">לכמה זמן תו החניה בתוקף?</string>
+    <string name="answerValidTicketTime">תו החניה תקף לשלוש שנים מרגע הנפקתו לתושב.</string>
+    <string name="contact">צור קשר:</string>
+    <string name="parkingAute">רשות החניה</string>
+    <string name="economyState">החברה הכלכלית</string>
 </resources>

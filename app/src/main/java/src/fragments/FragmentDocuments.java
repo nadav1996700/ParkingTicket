@@ -2,7 +2,6 @@ package src.fragments;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,8 +27,8 @@ import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText;
 import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import src.Model.DocumentHelper;
 import src.Utils.My_images;
@@ -94,30 +92,32 @@ public class FragmentDocuments extends Fragment {
     }
 
     private void validateData() {
+        boolean test1 = false, test2 = false, test3 = false, test4 = false;
         // the city that the resident need to live in
         final String desiredCity = "פתח תקווה";
         try {
             // check that the id's equals in all images
-            /*
-            boolean test1 = documentHelper.getId_from_idImage().equals(documentHelper.getId_from_carLicenseImage()) &&
+            test1 = documentHelper.getId_from_idImage().equals(documentHelper.getId_from_carLicenseImage()) &&
                     documentHelper.getId_from_carLicenseImage().equals(documentHelper.getId_from_drivingLicenseImage());
             // check that the type of license equals between car license and driving license
-            boolean test2 = documentHelper.getTypeOfLicense_from_carLicenseImage().equals(documentHelper.getTypeOfLicense_from_drivingLicenseImage());
+            test2 = documentHelper.getTypeOfLicense_from_carLicenseImage().contains(documentHelper.getTypeOfLicense_from_drivingLicenseImage());
             // check that the id, car license, and driving license is valid (by expiration date)
-            boolean test3 = !documentHelper.isDateExpired(documentHelper.getExpDate_from_carLicenseImage())
+            test3 = !documentHelper.isDateExpired(documentHelper.getExpDate_from_carLicenseImage())
                     && !documentHelper.isDateExpired(documentHelper.getExpDate_from_drivingLicenseImage())
                     && !documentHelper.isDateExpired(documentHelper.getExpDate_from_idImage());
             // check that the city in the driving license is equal to the desired city
-            boolean test4 = documentHelper.getAddress_from_drivingLicenseImage().contains(desiredCity);
-            */
+            test4 = documentHelper.getAddress_from_drivingLicenseImage().contains(desiredCity);
+            Log.d("test1", "" + test1);
+            Log.d("test2", "" + test2);
+            Log.d("test3", "" + test3);
+            Log.d("test4", "" + test4);
         } catch (Exception e) {
             e.printStackTrace();
             showErrorDialog("ודא שהתעודות בתוקף ושהפרטים תואמים בין התעודות");
         } finally {
             errorFlag = false;
         }
-        if (true) {
-            //if (test1 && test2 && test3 && test4) {
+        if (test1 && test2 && test3 && test4) {
             callBack_finishDataProcess.finishDataProcess(documentHelper.getCarNumber_from_carLicenseImage());
         } else {
             showErrorDialog("ודא שהתעודות בתוקף ושהפרטים תואמים בין התעודות");
@@ -231,10 +231,25 @@ public class FragmentDocuments extends Fragment {
     }
 
     private boolean extractTextFromIdTextResult(FirebaseVisionDocumentText result) {
-        List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
+        boolean foundId = false;
+        String expDate = "1.1.1930";
         try {
-            documentHelper.setId_from_idImage(blockList.get(11).getText().trim().replace(" ", ""));
-            documentHelper.setExpDate_from_idImage(blockList.get(12).getText().trim());
+            for (FirebaseVisionDocumentText.Block block : result.getBlocks()) {
+                for (FirebaseVisionDocumentText.Paragraph paragraph : block.getParagraphs()) {
+                    String paragraphText = paragraph.getText();
+                    // search for id
+                    if (!foundId && checkIdConditions(paragraphText)) {
+                        documentHelper.setId_from_idImage(paragraphText.trim().replace(" ", ""));
+                        foundId = true;
+                        continue;
+                    }
+                    // search for the latest date as expDate
+                    if (paragraphText.contains(".") && AfterDate(paragraphText, expDate)) {
+                        expDate = paragraphText.trim();
+                    }
+                }
+            }
+            documentHelper.setExpDate_from_idImage(expDate);
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             return false;
@@ -242,13 +257,63 @@ public class FragmentDocuments extends Fragment {
         return true;
     }
 
+    // check if "paragraphText" date is later than expDate
+    private boolean AfterDate(String paragraphText, String expDate) {
+        String[] paraTextDate = paragraphText.split("\\.");
+        String[] expDateDate = expDate.split("\\.");
+        int paraTextYear = Integer.parseInt(paraTextDate[2].trim());
+        int expDateYear = Integer.parseInt(expDateDate[2].trim());
+        // if years are equal
+        if (paraTextYear == expDateYear) {
+            // check by month
+            // remove leading zero from month
+            if (paraTextDate[1].charAt(0) == '0') paraTextDate[1] = paraTextDate[1].substring(1);
+            int paragraphText_month = Integer.parseInt(paraTextDate[1]);
+            // remove leading zero from month
+            if (expDateDate[1].charAt(0) == '0') expDateDate[1] = expDateDate[1].substring(1);
+            int expDateMonth = Integer.parseInt(expDateDate[1]);
+            return expDateMonth < paragraphText_month;
+        } else {
+            // check by year
+            return expDateYear < paraTextYear;
+        }
+    }
+
+    // check that the id number is valid
+    private boolean checkIdConditions(String paragraphText) {
+        String text = paragraphText.trim().replace(" ", "");
+        boolean length = text.length() == 9;
+        boolean firstChar = text.charAt(0) == '0' || text.charAt(0) == '2' || text.charAt(0) == '3';
+        return length && firstChar;
+    }
+
     private boolean extractTextFromDrivingTextResult(FirebaseVisionDocumentText result) {
-        List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
+        boolean foundTypeOfLicense = false, foundAddress = false, foundExpDate = false, foundId = false;
         try {
-            documentHelper.setTypeOfLicense_from_drivingLicenseImage(blockList.get(9).getParagraphs().get(0).getWords().get(1).getText().trim());
-            documentHelper.setAddress_from_drivingLicenseImage(blockList.get(7).getText());
-            documentHelper.setExpDate_from_drivingLicenseImage(blockList.get(5).getParagraphs().get(0).getWords().get(0).getText().trim().substring(3));
-            documentHelper.setId_from_drivingLicenseImage(blockList.get(6).getParagraphs().get(0).getWords().get(1).getText().trim());
+            for (FirebaseVisionDocumentText.Block block : result.getBlocks()) {
+                for (FirebaseVisionDocumentText.Paragraph paragraph : block.getParagraphs()) {
+                    String paragraphText = paragraph.getText();
+                    if (!foundTypeOfLicense && paragraphText.contains("9.")) {
+                        documentHelper.setTypeOfLicense_from_drivingLicenseImage(paragraphText.split("\\.")[1].trim());
+                        foundTypeOfLicense = true;
+                        continue;
+                    }
+                    if (!foundAddress && paragraphText.contains(".8")) {
+                        documentHelper.setAddress_from_drivingLicenseImage(paragraphText.split("\\.")[0]);
+                        foundAddress = true;
+                        continue;
+                    }
+                    if (!foundExpDate && paragraphText.contains("4b.")) {
+                        documentHelper.setExpDate_from_drivingLicenseImage(paragraphText.substring(3).trim());
+                        foundExpDate = true;
+                        continue;
+                    }
+                    if (!foundId && paragraphText.contains("4d.")) {
+                        documentHelper.setId_from_drivingLicenseImage(paragraphText.trim().split("D")[1].trim());
+                        foundId = true;
+                    }
+                }
+            }
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             return false;
@@ -257,13 +322,38 @@ public class FragmentDocuments extends Fragment {
     }
 
     private boolean extractTextFromCarLicenseTextResult(FirebaseVisionDocumentText result) {
-        List<FirebaseVisionDocumentText.Block> blockList = result.getBlocks();
+        boolean foundCarNumber = false, foundId = false, foundType = false;
+        String expDate = "1.1.1930";
         try {
-            documentHelper.setCarNumber_from_carLicenseImage(blockList.get(3).getText().trim());
-            documentHelper.setId_from_carLicenseImage(blockList.get(5).getParagraphs().get(2).getWords().get(2).getText().trim().replace("-", ""));
-            documentHelper.setExpDate_from_carLicenseImage(blockList.get(4).getText().trim().replace("/", "."));
-            documentHelper.setTypeOfLicense_from_carLicenseImage(blockList.get(5).getParagraphs().get(12).getWords().get(3).getText().trim());
-        } catch (IndexOutOfBoundsException e) {
+            for (FirebaseVisionDocumentText.Block block : result.getBlocks()) {
+                String blockText = block.getText();
+                for (FirebaseVisionDocumentText.Paragraph paragraph : block.getParagraphs()) {
+                    String paragraphText = paragraph.getText();
+                    if (!foundCarNumber && paragraphText.length() == 7) {
+                        try {
+                            Integer.parseInt(paragraphText.trim());
+                            documentHelper.setCarNumber_from_carLicenseImage(paragraphText.trim());
+                            foundCarNumber = true;
+                        } catch (NumberFormatException ex) {
+                            continue;
+                        }
+                    }
+                    if (!foundId && paragraphText.contains("-")) {
+                        documentHelper.setId_from_carLicenseImage(paragraphText.replace("-", "").split(" ")[0].trim());
+                        foundId = true;
+                        continue;
+                    }
+                    if (Pattern.matches("^\\d{2}/\\d{2}/\\d{4}$", blockText.trim()) && AfterDate(paragraphText.replace("/", ".").trim(), expDate)) {
+                        expDate = paragraphText.trim().replace("/", ".").trim();
+                        documentHelper.setExpDate_from_carLicenseImage(expDate);
+                    }
+                    if (!foundType && paragraphText.contains("מתאים")) {
+                        documentHelper.setTypeOfLicense_from_carLicenseImage(paragraphText.split(" ")[3]);
+                        foundType = true;
+                    }
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }

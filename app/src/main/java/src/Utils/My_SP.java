@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
-import src.Model.PersonalDetails;
-
 public class My_SP {
     private static My_SP instance;
     private SharedPreferences prefs;

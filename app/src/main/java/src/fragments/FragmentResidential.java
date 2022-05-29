@@ -1,17 +1,15 @@
 package src.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.example.src.R;
 import com.google.android.material.button.MaterialButton;
@@ -19,7 +17,6 @@ import com.google.gson.Gson;
 
 import java.util.regex.Pattern;
 
-import src.Model.PersonalDetails;
 import src.Model.Residential;
 import src.Model.ResidentialState;
 import src.Utils.My_SP;
