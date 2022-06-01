@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <item
-            android:id="@+id/page_1"
-            android:enabled="true"
-            android:title="הנפקה"
-            android:icon="@drawable/ic_new_ticket_foreground"
-            />
-        <item
-            android:id="@+id/page_2"
-            android:enabled="true"
-            android:title="מידע"
-            android:icon="@drawable/ic_info_foreground"/>
-        <item
-            android:id="@+id/page_3"
-            android:enabled="true"
-            android:title="סטטוס"
-            android:icon="@drawable/ic_status_foreground"/>
+    <item
+        android:id="@+id/page_1"
+        android:enabled="true"
+        android:icon="@drawable/ic_new_ticket_foreground"
+        android:orderInCategory="1"
+        android:title="הנפקה"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/page_2"
+        android:enabled="true"
+        android:icon="@drawable/ic_info_foreground"
+        android:orderInCategory="2"
+        android:title="מידע"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/page_3"
+        android:enabled="true"
+        android:icon="@drawable/ic_status_foreground"
+        android:orderInCategory="3"
+        android:title="סטטוס"
+        app:showAsAction="always" />
 </menu>

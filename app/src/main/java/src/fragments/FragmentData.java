@@ -19,6 +19,7 @@ public class FragmentData extends Fragment {
     protected View view;
     private ImageView imageView1;
     private ImageView imageView2;
+    private ImageView headImage;
 
     public FragmentData() {
         // Required empty public constructor
@@ -45,11 +46,13 @@ public class FragmentData extends Fragment {
     private void bindVariables() {
         imageView1 = view.findViewById(R.id.data_IV_img1);
         imageView2 = view.findViewById(R.id.data_IV_img2);
+        headImage = view.findViewById(R.id.data_IV_headImage);
     }
 
     private void setImages() {
         My_images images = My_images.getInstance();
         images.setImage(imageView1, ContextCompat.getDrawable(getContext(), R.drawable.image1));
         images.setImage(imageView2, ContextCompat.getDrawable(getContext(), R.drawable.image2));
+        images.setImage(headImage, ContextCompat.getDrawable(getContext(), R.drawable.parking_ticket_request_image));
     }
 }
