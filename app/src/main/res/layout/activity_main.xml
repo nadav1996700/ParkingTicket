@@ -31,15 +31,14 @@
             android:layout_height="wrap_content"
             app:spb_animateToCurrentProgressState="true"
             app:spb_checkStateCompleted="true"
+            app:spb_currentStateDescriptionColor="#CD37E6"
             app:spb_currentStateNumber="one"
             app:spb_maxStateNumber="three"
             app:spb_stateBackgroundColor="#BDBDBD"
+            app:spb_stateDescriptionColor="#808080"
             app:spb_stateForegroundColor="#CD37E6"
             app:spb_stateNumberBackgroundColor="#808080"
-            app:spb_stateNumberForegroundColor="#eeeeee"
-            app:spb_currentStateDescriptionColor="#CD37E6"
-            app:spb_stateDescriptionColor="#808080"
-             />
+            app:spb_stateNumberForegroundColor="#eeeeee" />
 
     </LinearLayout>
 

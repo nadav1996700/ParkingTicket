@@ -58,7 +58,7 @@ public class DataActivity extends AppCompatActivity {
 
     /* initialize variables */
     private void initVariables() {
-        bnv = findViewById(R.id.main_NAV_navigation);
+        bnv = findViewById(R.id.data_NAV_navigation);
         bnv.setSelectedItemId(R.id.page_2);
     }
 

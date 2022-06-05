@@ -50,17 +50,11 @@ public class StatusActivity extends AppCompatActivity {
             return true;
         });
 
-        carNumber.setOnClickListener(view -> {
-            carNumber.setError(null);
-        });
+        carNumber.setOnClickListener(view -> carNumber.setError(null));
 
-        parkingTicketNumber.setOnClickListener(view -> {
-            parkingTicketNumber.setError(null);
-        });
+        parkingTicketNumber.setOnClickListener(view -> parkingTicketNumber.setError(null));
 
-        checkButton.setOnClickListener(view -> {
-            checkParkingTicketStatus();
-        });
+        checkButton.setOnClickListener(view -> checkParkingTicketStatus());
     }
 
     private void checkParkingTicketStatus() {
@@ -68,8 +62,8 @@ public class StatusActivity extends AppCompatActivity {
         parkingTicketNumber.setError(null);
         String _carNumber = carNumber.getText().toString();
         String _parkingTicketNumber = parkingTicketNumber.getText().toString();
-        if (_carNumber.length() != 7 && _carNumber.length() != 8) {
-            carNumber.setError("מספר רכב חייב להיות בן 7 או 8 ספרות!");
+        if (_carNumber.length() < 6) {
+            carNumber.setError("מספר רכב חייב להיות בן 6 ספרות לפחות");
         } else if (_parkingTicketNumber.isEmpty()) {
             parkingTicketNumber.setError("הקלד מספר תו חניה!");
         } else {

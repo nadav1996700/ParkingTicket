@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements
         String subject = "תו חניה";
         String message =
                 "תו החניה שלך עבור רכב שמספרו: " + car.getCarId() + " הונפק בהצלחה." +
-                        " ותוקפו למשך שנה, מספר תו החניה: " + pticket.getTicketId();
+                        " ותוקפו למשך שלוש שנים, מספר תו החניה: " + pticket.getTicketId();
         SendMail sendMail = new SendMail(email, subject, message);
         sendMail.execute();
     }
