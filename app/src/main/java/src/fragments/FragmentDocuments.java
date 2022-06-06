@@ -94,13 +94,13 @@ public class FragmentDocuments extends Fragment {
     private void validateData() {
         boolean test1 = false, test2 = false, test3 = false, test4 = false;
         // the city that the resident need to live in
-        final String desiredCity = "פתח תקווה";
+        final String desiredCity = "ראש העין";
         try {
             // check that the id's equals in all images
             test1 = documentHelper.getId_from_idImage().equals(documentHelper.getId_from_carLicenseImage()) &&
                     documentHelper.getId_from_carLicenseImage().equals(documentHelper.getId_from_drivingLicenseImage());
             // check that the type of license equals between car license and driving license
-            test2 = documentHelper.getTypeOfLicense_from_carLicenseImage().contains(documentHelper.getTypeOfLicense_from_drivingLicenseImage());
+            test2 = documentHelper.getTypeOfLicense_from_carLicenseImage().trim().equals(documentHelper.getTypeOfLicense_from_drivingLicenseImage().trim());
             // check that the id image, car license, and driving license is valid (by expiration date)
             test3 = !documentHelper.isDateExpired(documentHelper.getExpDate_from_carLicenseImage())
                     && !documentHelper.isDateExpired(documentHelper.getExpDate_from_drivingLicenseImage())
@@ -117,8 +117,8 @@ public class FragmentDocuments extends Fragment {
         } finally {
             errorFlag = false;
         }
-        if(true) {
-        //if (test1 && test2 && test3 && test4) {
+
+        if (test1 && test2 && test3 && test4) {
             callBack_finishDataProcess.finishDataProcess(documentHelper.getCarNumber_from_carLicenseImage());
         } else {
             showErrorDialog("ודא שהתעודות בתוקף ושהפרטים תואמים בין התעודות");
@@ -245,11 +245,12 @@ public class FragmentDocuments extends Fragment {
                         continue;
                     }
                     // search for the latest date as expDate
-                    if (paragraphText.contains(".") && AfterDate(paragraphText, expDate)) {
+                    if (paragraphText.contains(".") && paragraphText.length() > 6 && AfterDate(paragraphText, expDate)) {
                         expDate = paragraphText.trim();
                     }
                 }
             }
+            //Log.d("expDateIdImage: ", expDate);
             documentHelper.setExpDate_from_idImage(expDate);
         } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -296,21 +297,24 @@ public class FragmentDocuments extends Fragment {
                     String paragraphText = paragraph.getText();
                     if (!foundTypeOfLicense && paragraphText.contains("9.")) {
                         documentHelper.setTypeOfLicense_from_drivingLicenseImage(paragraphText.split("\\.")[1].trim());
+                        //Log.d("typeDrivingImage: ", documentHelper.getTypeOfLicense_from_drivingLicenseImage());
                         foundTypeOfLicense = true;
                         continue;
                     }
                     if (!foundAddress && paragraphText.contains(".8")) {
                         documentHelper.setAddress_from_drivingLicenseImage(paragraphText.split("\\.")[0]);
+                        //Log.d("addressDrivingImage: ", documentHelper.getAddress_from_drivingLicenseImage());
                         foundAddress = true;
                         continue;
                     }
                     if (!foundExpDate && paragraphText.contains("4b.")) {
-                        documentHelper.setExpDate_from_drivingLicenseImage(paragraphText.substring(3).trim());
+                        documentHelper.setExpDate_from_drivingLicenseImage(paragraphText.substring(3, 14).trim());
+                        //Log.d("expDatedrivingImage: ", documentHelper.getExpDate_from_drivingLicenseImage());
                         foundExpDate = true;
-                        continue;
                     }
-                    if (!foundId && paragraphText.contains("4d.")) {
+                    if (!foundId && paragraphText.contains("ID")) {
                         documentHelper.setId_from_drivingLicenseImage(paragraphText.trim().split("D")[1].trim());
+                        //Log.d("idDrivingImage: ", documentHelper.getId_from_drivingLicenseImage());
                         foundId = true;
                     }
                 }
@@ -326,32 +330,69 @@ public class FragmentDocuments extends Fragment {
         boolean foundCarNumber = false, foundId = false, foundType = false;
         String expDate = "1.1.1930";
         try {
+            int paraIndex;
             for (FirebaseVisionDocumentText.Block block : result.getBlocks()) {
-                String blockText = block.getText();
+                paraIndex = 0;
                 for (FirebaseVisionDocumentText.Paragraph paragraph : block.getParagraphs()) {
                     String paragraphText = paragraph.getText();
-                    if (!foundCarNumber && paragraphText.length() == 7) {
+                    Log.d("para-" + paraIndex, paragraphText);
+
+                    // car number
+                    /*
+                    if (!foundCarNumber && paragraphText.length() >= 6 && paragraphText.length() <= 8) {
                         try {
                             Integer.parseInt(paragraphText.trim());
                             documentHelper.setCarNumber_from_carLicenseImage(paragraphText.trim());
+                            Log.d("carNumber: ", paragraphText.trim());
                             foundCarNumber = true;
                         } catch (NumberFormatException ex) {
                             continue;
                         }
                     }
-                    if (!foundId && paragraphText.contains("-")) {
-                        documentHelper.setId_from_carLicenseImage(paragraphText.replace("-", "").split(" ")[0].trim());
-                        foundId = true;
-                        continue;
+
+                     */
+                    // id
+                    if (!foundId && paragraphText.contains("-") && !paragraphText.contains("דרגת")) {
+                        for (FirebaseVisionDocumentText.Word word : paragraph.getWords()) {
+                            if (word.getText().length() == 10 && word.getText().contains("-")) {
+                                documentHelper.setId_from_carLicenseImage(word.getText().replace("-", "").trim());
+                                //Log.d("IdFromcarLicense: ", documentHelper.getId_from_carLicenseImage());
+                                foundId = true;
+                            }
+                        }
                     }
-                    if (Pattern.matches("^\\d{2}/\\d{2}/\\d{4}$", blockText.trim()) && AfterDate(paragraphText.replace("/", ".").trim(), expDate)) {
-                        expDate = paragraphText.trim().replace("/", ".").trim();
-                        documentHelper.setExpDate_from_carLicenseImage(expDate);
+                    // expiration date
+                    if (paragraphText.contains("/")) {
+                        String[] words = paragraphText.split(" ");
+                        Log.d("words: ", Arrays.toString(words));
+                        for (FirebaseVisionDocumentText.Word word : paragraph.getWords()) {
+                            if (Pattern.matches("^\\d{2}/\\d{2}/\\d{4}$", word.getText().replace(".", ""))
+                                    && AfterDate(word.getText().replace(".", "").replace("/", ".").trim(), expDate)) {
+                                expDate = word.getText().replace(".", "").replace("/", ".").trim();
+                                documentHelper.setExpDate_from_carLicenseImage(expDate);
+                                //Log.d("expDateCarLicense: ", documentHelper.getExpDate_from_carLicenseImage());
+                            }
+                            // car number
+                            if (!foundCarNumber && word.getText().trim().length() == 8 && !word.getText().contains("/")) {
+                                documentHelper.setCarNumber_from_carLicenseImage(word.getText());
+                                Log.d("carNumber: ", documentHelper.getCarNumber_from_carLicenseImage());
+                                foundCarNumber = true;
+                            }
+                        }
                     }
-                    if (!foundType && paragraphText.contains("מתאים")) {
-                        documentHelper.setTypeOfLicense_from_carLicenseImage(paragraphText.split(" ")[3]);
-                        foundType = true;
+
+                    // type of license
+                    if (!foundType && paragraphText.contains("רשיון")) {
+                        String[] words = paragraphText.split(" ");
+                        for (String word : words) {
+                            if (word.length() == 1 || word.length() == 2) {
+                                documentHelper.setTypeOfLicense_from_carLicenseImage(word);
+                                //Log.d("typeFromCarLicense: ", documentHelper.getTypeOfLicense_from_carLicenseImage());
+                                foundType = true;
+                            }
+                        }
                     }
+                    paraIndex += 1;
                 }
             }
         } catch (Exception e) {
