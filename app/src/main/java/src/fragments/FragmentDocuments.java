@@ -330,27 +330,9 @@ public class FragmentDocuments extends Fragment {
         boolean foundCarNumber = false, foundId = false, foundType = false;
         String expDate = "1.1.1930";
         try {
-            int paraIndex;
             for (FirebaseVisionDocumentText.Block block : result.getBlocks()) {
-                paraIndex = 0;
                 for (FirebaseVisionDocumentText.Paragraph paragraph : block.getParagraphs()) {
                     String paragraphText = paragraph.getText();
-                    Log.d("para-" + paraIndex, paragraphText);
-
-                    // car number
-                    /*
-                    if (!foundCarNumber && paragraphText.length() >= 6 && paragraphText.length() <= 8) {
-                        try {
-                            Integer.parseInt(paragraphText.trim());
-                            documentHelper.setCarNumber_from_carLicenseImage(paragraphText.trim());
-                            Log.d("carNumber: ", paragraphText.trim());
-                            foundCarNumber = true;
-                        } catch (NumberFormatException ex) {
-                            continue;
-                        }
-                    }
-
-                     */
                     // id
                     if (!foundId && paragraphText.contains("-") && !paragraphText.contains("דרגת")) {
                         for (FirebaseVisionDocumentText.Word word : paragraph.getWords()) {
@@ -361,22 +343,25 @@ public class FragmentDocuments extends Fragment {
                             }
                         }
                     }
+                    // car number
+                    if (!foundCarNumber && paragraph.getText().trim().length() == 8 && !paragraph.getText().contains("/")) {
+                        try {
+                            int carNumber = Integer.parseInt(paragraph.getText().trim());
+                            documentHelper.setCarNumber_from_carLicenseImage(String.valueOf(carNumber));
+                            Log.d("carNumber: ", documentHelper.getCarNumber_from_carLicenseImage());
+                            foundCarNumber = true;
+                        } catch (Exception ignored) {
+
+                        }
+                    }
                     // expiration date
                     if (paragraphText.contains("/")) {
-                        String[] words = paragraphText.split(" ");
-                        Log.d("words: ", Arrays.toString(words));
                         for (FirebaseVisionDocumentText.Word word : paragraph.getWords()) {
                             if (Pattern.matches("^\\d{2}/\\d{2}/\\d{4}$", word.getText().replace(".", ""))
                                     && AfterDate(word.getText().replace(".", "").replace("/", ".").trim(), expDate)) {
                                 expDate = word.getText().replace(".", "").replace("/", ".").trim();
                                 documentHelper.setExpDate_from_carLicenseImage(expDate);
                                 //Log.d("expDateCarLicense: ", documentHelper.getExpDate_from_carLicenseImage());
-                            }
-                            // car number
-                            if (!foundCarNumber && word.getText().trim().length() == 8 && !word.getText().contains("/")) {
-                                documentHelper.setCarNumber_from_carLicenseImage(word.getText());
-                                Log.d("carNumber: ", documentHelper.getCarNumber_from_carLicenseImage());
-                                foundCarNumber = true;
                             }
                         }
                     }
@@ -392,7 +377,6 @@ public class FragmentDocuments extends Fragment {
                             }
                         }
                     }
-                    paraIndex += 1;
                 }
             }
         } catch (Exception e) {
